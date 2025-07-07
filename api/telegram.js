@@ -45,3 +45,14 @@ module.exports = async function handler(req, res) {
     });
     
     const data = await response.json();
+    
+    if (!data.ok) {
+      throw new Error(data.description || 'Failed to send message to Telegram');
+    }
+    
+    return res.status(200).json({ success: true, data });
+  } catch (error) {
+    console.error('Telegram API error:', error);
+    return res.status(500).json({ error: error.message });
+  }
+}
