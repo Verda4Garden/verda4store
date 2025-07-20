@@ -6,8 +6,8 @@
 // Payment account details
 const PAYMENT_ACCOUNTS = {
     bri: {
-        accountNumber: "1234567890",
-        accountName: "Verda4Garden",
+        accountNumber: "0082-01-168996-50-9",
+        accountName: "muhammad walid fahril basri",
         bankName: "Bank BRI",
         appDeepLink: "bri://home" // Deep link untuk membuka aplikasi BRI Mobile
     },
