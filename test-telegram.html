@@ -1,0 +1,577 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Test Telegram Bot Integration</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+            line-height: 1.6;
+        }
+        h1 {
+            color: #333;
+            text-align: center;
+            margin-bottom: 30px;
+        }
+        .card {
+            background-color: #f9f9f9;
+            border-radius: 8px;
+            padding: 20px;
+            margin-bottom: 20px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        .button {
+            background-color: #4CAF50;
+            border: none;
+            color: white;
+            padding: 10px 20px;
+            text-align: center;
+            text-decoration: none;
+            display: inline-block;
+            font-size: 16px;
+            margin: 10px 0;
+            cursor: pointer;
+            border-radius: 4px;
+            transition: background-color 0.3s;
+        }
+        .button:hover {
+            background-color: #45a049;
+        }
+        .button:disabled {
+            background-color: #cccccc;
+            cursor: not-allowed;
+        }
+        #result {
+            margin-top: 20px;
+            padding: 15px;
+            border-radius: 4px;
+            display: none;
+        }
+        .success {
+            background-color: #dff0d8;
+            color: #3c763d;
+            border: 1px solid #d6e9c6;
+        }
+        .error {
+            background-color: #f2dede;
+            color: #a94442;
+            border: 1px solid #ebccd1;
+        }
+        pre {
+            background-color: #f5f5f5;
+            padding: 10px;
+            border-radius: 4px;
+            overflow-x: auto;
+            white-space: pre-wrap;
+            word-wrap: break-word;
+        }
+        
+        .form-group {
+            margin-bottom: 15px;
+        }
+        
+        .form-group label {
+            display: block;
+            margin-bottom: 5px;
+            font-weight: bold;
+        }
+        
+        .input-field {
+            width: 100%;
+            padding: 10px;
+            border-radius: 4px;
+            border: 1px solid #ddd;
+            font-size: 14px;
+        }
+        
+        textarea.input-field {
+            min-height: 80px;
+            resize: vertical;
+        }
+        
+        .button-group {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 15px;
+        }
+        
+        @media (max-width: 600px) {
+            .button-group {
+                flex-direction: column;
+            }
+        }
+        .logs {
+            margin-top: 20px;
+            max-height: 300px;
+            overflow-y: auto;
+            background-color: #f5f5f5;
+            padding: 10px;
+            border-radius: 4px;
+            font-family: monospace;
+        }
+        .back-link {
+            display: block;
+            margin-top: 30px;
+            text-align: center;
+        }
+        
+        .status-display {
+            background-color: #f9f9f9;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            padding: 15px;
+            margin-top: 15px;
+        }
+        
+        .status-item {
+            border-bottom: 1px solid #eee;
+            padding: 10px 0;
+            margin-bottom: 10px;
+        }
+        
+        .status-item:last-child {
+            border-bottom: none;
+            margin-bottom: 0;
+        }
+        
+        .status-processing {
+            background-color: #fff3cd;
+            border-left: 4px solid #ffc107;
+            padding-left: 10px;
+        }
+        
+        .status-completed {
+            background-color: #d4edda;
+            border-left: 4px solid #28a745;
+            padding-left: 10px;
+        }
+        
+        .status-header {
+            font-weight: bold;
+            margin-bottom: 5px;
+        }
+        
+        .status-time {
+            font-size: 0.8em;
+            color: #666;
+            margin-top: 5px;
+        }
+    </style>
+</head>
+<body>
+    <h1>Test Telegram Bot Integration</h1>
+    
+    <div class="card">
+        <h2>Bot Configuration</h2>
+        <p><strong>Bot Token:</strong> <span id="botToken">Loading...</span></p>
+        <p><strong>Chat ID:</strong> <span id="chatId">Loading...</span></p>
+        <p><strong>Environment:</strong> <span id="environment">Detecting...</span></p>
+    </div>
+    
+    <div class="card">
+        <h2>Test Telegram Bot</h2>
+        <p>Click the button below to send a test message to the Telegram bot. This will help diagnose any issues with the integration.</p>
+        <button id="testButton" class="button">Send Test Message</button>
+        
+        <div id="result"></div>
+    </div>
+    
+    <div class="card">
+        <h2>Diamond Status Updates</h2>
+        <p>Use this section to update and display diamond status on the website.</p>
+        
+        <div class="form-group">
+            <label for="invoiceId">Invoice ID:</label>
+            <input type="text" id="invoiceId" placeholder="e.g., MLBB-12345678" class="input-field">
+        </div>
+        
+        <div class="form-group">
+            <label for="playerName">Player ID/Name:</label>
+            <input type="text" id="playerName" placeholder="e.g., 123456789 (1234)" class="input-field">
+        </div>
+        
+        <div class="form-group">
+            <label for="diamondAmount">Diamond Amount:</label>
+            <input type="number" id="diamondAmount" placeholder="e.g., 100" class="input-field">
+        </div>
+        
+        <div class="form-group">
+            <label for="amount">Total Amount (Rp):</label>
+            <input type="number" id="amount" placeholder="e.g., 25000" class="input-field">
+        </div>
+        
+        <div class="form-group">
+            <label for="notes">Notes (optional):</label>
+            <textarea id="notes" placeholder="Additional notes..." class="input-field"></textarea>
+        </div>
+        
+        <div class="button-group">
+            <button id="processingButton" class="button">Update Status "Diamond Sedang Diproses"</button>
+            <button id="completedButton" class="button">Update Status "Diamond Sudah Dikirim"</button>
+        </div>
+        
+        <div id="diamondResult"></div>
+    </div>
+    
+    <div class="card">
+        <h2>Diamond Status Display</h2>
+        <p>This section displays the current diamond status updates.</p>
+        
+        <div id="diamondStatusDisplay" class="status-display">
+            <p>No diamond status updates yet.</p>
+        </div>
+    </div>
+    
+    <div class="card">
+        <h2>Console Logs</h2>
+        <p>Check the logs below for detailed information about the test:</p>
+        <div id="logs" class="logs"></div>
+    </div>
+    
+    <a href="index.html" class="back-link">Back to Home</a>
+    
+    <!-- Include the Telegram Bot script -->
+    <script src="js/telegram-bot.js"></script>
+    
+    <script>
+        // Override console.log to capture logs
+        const originalConsoleLog = console.log;
+        const originalConsoleError = console.error;
+        const originalConsoleWarn = console.warn;
+        const originalConsoleInfo = console.info;
+        
+        function addLogToUI(message, type = 'log') {
+            const logsElement = document.getElementById('logs');
+            const logEntry = document.createElement('div');
+            
+            // Format the message
+            let formattedMessage = message;
+            if (typeof message === 'object') {
+                try {
+                    formattedMessage = JSON.stringify(message, null, 2);
+                } catch (e) {
+                    formattedMessage = message.toString();
+                }
+            }
+            
+            // Set color based on log type
+            let color = 'black';
+            if (type === 'error') color = 'red';
+            if (type === 'warn') color = 'orange';
+            if (type === 'info') color = 'blue';
+            
+            logEntry.innerHTML = `<span style="color:${color}">[${type.toUpperCase()}] ${formattedMessage}</span>`;
+            logsElement.appendChild(logEntry);
+            
+            // Auto-scroll to bottom
+            logsElement.scrollTop = logsElement.scrollHeight;
+        }
+        
+        // Override console methods
+        console.log = function() {
+            originalConsoleLog.apply(console, arguments);
+            Array.from(arguments).forEach(arg => addLogToUI(arg, 'log'));
+        };
+        
+        console.error = function() {
+            originalConsoleError.apply(console, arguments);
+            Array.from(arguments).forEach(arg => addLogToUI(arg, 'error'));
+        };
+        
+        console.warn = function() {
+            originalConsoleWarn.apply(console, arguments);
+            Array.from(arguments).forEach(arg => addLogToUI(arg, 'warn'));
+        };
+        
+        console.info = function() {
+            originalConsoleInfo.apply(console, arguments);
+            Array.from(arguments).forEach(arg => addLogToUI(arg, 'info'));
+        };
+        
+        // Display bot configuration
+        document.addEventListener('DOMContentLoaded', function() {
+            // Check if TELEGRAM_CONFIG is available
+            if (typeof TELEGRAM_CONFIG !== 'undefined') {
+                // Mask the bot token for security (show only first 8 chars)
+                const maskedToken = TELEGRAM_CONFIG.botToken.substring(0, 8) + '...' + 
+                                   TELEGRAM_CONFIG.botToken.substring(TELEGRAM_CONFIG.botToken.length - 4);
+                document.getElementById('botToken').textContent = maskedToken;
+                document.getElementById('chatId').textContent = TELEGRAM_CONFIG.chatId;
+                
+                // Determine environment
+                const isLocal = window.location.hostname === 'localhost' || 
+                               window.location.hostname === '127.0.0.1' ||
+                               window.location.protocol === 'file:';
+                document.getElementById('environment').textContent = isLocal ? 'Local' : 'Deployed';
+                
+                console.log('Bot configuration loaded successfully');
+                console.log('Environment:', isLocal ? 'Local' : 'Deployed');
+            } else {
+                document.getElementById('botToken').textContent = 'Not available';
+                document.getElementById('chatId').textContent = 'Not available';
+                document.getElementById('environment').textContent = 'Unknown';
+                console.error('TELEGRAM_CONFIG is not defined. Make sure telegram-bot.js is loaded correctly.');
+            }
+        });
+        
+        // Handle test button click
+        document.getElementById('testButton').addEventListener('click', async function() {
+            const button = this;
+            const resultElement = document.getElementById('result');
+            
+            // Disable button during test
+            button.disabled = true;
+            button.textContent = 'Testing...';
+            
+            // Clear previous result
+            resultElement.style.display = 'none';
+            resultElement.className = '';
+            resultElement.textContent = '';
+            
+            console.log('Starting Telegram bot test...');
+            
+            try {
+                // Check if testTelegramBot function exists
+                if (typeof window.testTelegramBot !== 'function') {
+                    throw new Error('testTelegramBot function is not available. Make sure telegram-bot.js is loaded correctly and includes this function.');
+                }
+                
+                // Call the test function
+                const result = await window.testTelegramBot();
+                
+                // Display result
+                resultElement.style.display = 'block';
+                
+                if (result) {
+                    resultElement.className = 'success';
+                    resultElement.textContent = 'Test successful! The message was sent to Telegram.';
+                    console.log('Test completed successfully');
+                } else {
+                    resultElement.className = 'error';
+                    resultElement.textContent = 'Test failed. Check the console logs for details.';
+                    console.error('Test failed');
+                }
+            } catch (error) {
+                // Display error
+                resultElement.style.display = 'block';
+                resultElement.className = 'error';
+                resultElement.textContent = `Error: ${error.message}`;
+                console.error('Test error:', error);
+            } finally {
+                // Re-enable button
+                button.disabled = false;
+                button.textContent = 'Send Test Message';
+            }
+        });
+        
+        // Load existing diamond status updates when the page loads
+        document.addEventListener('DOMContentLoaded', function() {
+            loadDiamondStatusUpdates();
+        });
+        
+        // Handle diamond status buttons
+        document.getElementById('processingButton').addEventListener('click', function() {
+            updateDiamondStatus('processing', this);
+        });
+        
+        document.getElementById('completedButton').addEventListener('click', function() {
+            updateDiamondStatus('completed', this);
+        });
+        
+        // Function to update diamond status on the website
+        function updateDiamondStatus(status, button) {
+            const resultElement = document.getElementById('diamondResult');
+            const invoiceId = document.getElementById('invoiceId').value.trim();
+            const playerName = document.getElementById('playerName').value.trim();
+            const diamondAmount = document.getElementById('diamondAmount').value.trim();
+            const amount = document.getElementById('amount').value.trim();
+            const notes = document.getElementById('notes').value.trim();
+            
+            // Validate inputs
+            if (!invoiceId) {
+                showDiamondResult('Please enter an Invoice ID', 'error');
+                return;
+            }
+            
+            if (!playerName) {
+                showDiamondResult('Please enter a Player ID/Name', 'error');
+                return;
+            }
+            
+            if (!diamondAmount) {
+                showDiamondResult('Please enter a Diamond Amount', 'error');
+                return;
+            }
+            
+            if (!amount) {
+                showDiamondResult('Please enter a Total Amount', 'error');
+                return;
+            }
+            
+            // Disable buttons during processing
+            const buttons = document.querySelectorAll('.button-group button');
+            buttons.forEach(btn => btn.disabled = true);
+            button.textContent = 'Updating...';
+            
+            // Clear previous result
+            resultElement.style.display = 'none';
+            resultElement.className = '';
+            resultElement.textContent = '';
+            
+            console.log(`Updating diamond ${status} status...`);
+            
+            try {
+                // Prepare data
+                const statusData = {
+                    invoiceId: invoiceId,
+                    playerName: playerName,
+                    diamondAmount: parseInt(diamondAmount),
+                    amount: parseInt(amount),
+                    status: status,
+                    timestamp: new Date().toLocaleString('id-ID', {
+                        year: 'numeric',
+                        month: 'long',
+                        day: 'numeric',
+                        hour: '2-digit',
+                        minute: '2-digit'
+                    }),
+                    notes: notes,
+                    id: Date.now() // Unique ID for this status update
+                };
+                
+                // Get game name from invoice prefix
+                let gameName = "Game";
+                if (invoiceId.startsWith("PUBG-")) {
+                    gameName = "PUBG Mobile";
+                } else if (invoiceId.startsWith("MLBB-")) {
+                    gameName = "Mobile Legends";
+                } else if (invoiceId.startsWith("FF-")) {
+                    gameName = "Free Fire";
+                }
+                statusData.gameName = gameName;
+                
+                // Save to localStorage
+                saveDiamondStatus(statusData);
+                
+                // Update the display
+                addStatusToDisplay(statusData);
+                
+                // Display success message
+                showDiamondResult(
+                    status === 'processing'
+                        ? 'Diamond status updated to "Sedang Diproses"'
+                        : 'Diamond status updated to "Sudah Dikirim"',
+                    'success'
+                );
+                console.log('Diamond status updated successfully');
+                
+                // Clear form fields
+                document.getElementById('invoiceId').value = '';
+                document.getElementById('playerName').value = '';
+                document.getElementById('diamondAmount').value = '';
+                document.getElementById('amount').value = '';
+                document.getElementById('notes').value = '';
+                
+            } catch (error) {
+                showDiamondResult(`Error: ${error.message}`, 'error');
+                console.error('Diamond status error:', error);
+            } finally {
+                // Re-enable buttons
+                buttons.forEach(btn => btn.disabled = false);
+                button.textContent = status === 'processing'
+                    ? 'Update Status "Diamond Sedang Diproses"'
+                    : 'Update Status "Diamond Sudah Dikirim"';
+            }
+        }
+        
+        // Helper function to show diamond result
+        function showDiamondResult(message, type) {
+            const resultElement = document.getElementById('diamondResult');
+            resultElement.textContent = message;
+            resultElement.className = type;
+            resultElement.style.display = 'block';
+            
+            // Scroll to result
+            resultElement.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+        }
+        
+        // Save diamond status to localStorage
+        function saveDiamondStatus(statusData) {
+            // Get existing status updates
+            let statusUpdates = JSON.parse(localStorage.getItem('diamondStatusUpdates') || '[]');
+            
+            // Add new status update
+            statusUpdates.push(statusData);
+            
+            // Keep only the last 10 updates
+            if (statusUpdates.length > 10) {
+                statusUpdates = statusUpdates.slice(-10);
+            }
+            
+            // Save back to localStorage
+            localStorage.setItem('diamondStatusUpdates', JSON.stringify(statusUpdates));
+        }
+        
+        // Load diamond status updates from localStorage
+        function loadDiamondStatusUpdates() {
+            const statusUpdates = JSON.parse(localStorage.getItem('diamondStatusUpdates') || '[]');
+            const displayElement = document.getElementById('diamondStatusDisplay');
+            
+            // Clear the display
+            displayElement.innerHTML = '';
+            
+            if (statusUpdates.length === 0) {
+                displayElement.innerHTML = '<p>No diamond status updates yet.</p>';
+                return;
+            }
+            
+            // Add each status update to the display
+            statusUpdates.forEach(statusData => {
+                addStatusToDisplay(statusData);
+            });
+        }
+        
+        // Add a status update to the display
+        function addStatusToDisplay(statusData) {
+            const displayElement = document.getElementById('diamondStatusDisplay');
+            
+            // Remove "No updates" message if it exists
+            if (displayElement.innerHTML === '<p>No diamond status updates yet.</p>') {
+                displayElement.innerHTML = '';
+            }
+            
+            // Create status item element
+            const statusItem = document.createElement('div');
+            statusItem.className = `status-item status-${statusData.status}`;
+            statusItem.id = `status-${statusData.id}`;
+            
+            // Create status content
+            let statusTitle = statusData.status === 'processing'
+                ? '⏳ Diamond Sedang Diproses'
+                : '✅ Diamond Sudah Dikirim';
+            
+            let statusContent = `
+                <div class="status-header">${statusTitle}: ${statusData.gameName}</div>
+                <div><strong>📋 Invoice ID:</strong> ${statusData.invoiceId}</div>
+                <div><strong>👤 Player ID:</strong> ${statusData.playerName}</div>
+                <div><strong>💎 Jumlah Diamond:</strong> ${statusData.diamondAmount}</div>
+                <div><strong>💰 Total:</strong> Rp ${statusData.amount.toLocaleString('id-ID')}</div>
+                <div class="status-time">🕒 ${statusData.timestamp}</div>
+            `;
+            
+            if (statusData.notes) {
+                statusContent += `<div><strong>📝 Catatan:</strong> ${statusData.notes}</div>`;
+            }
+            
+            statusItem.innerHTML = statusContent;
+            
+            // Add to display (newest first)
+            displayElement.insertBefore(statusItem, displayElement.firstChild);
+        }
+    </script>
+</body>
+</html>

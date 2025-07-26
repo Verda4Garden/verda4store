@@ -3,8 +3,8 @@
 <head>
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1" />
-<title>Mobile Legends – Verda4Garden</title>
-<link rel="icon" href="logo.jpg" type="image/jpeg">
+<title>Mobile Legends – Verda4Store</title>
+<link rel="icon" href="logoverda.jpg" type="image/jpeg">
 <link href="https://fonts.googleapis.com/css2?family=Segoe+UI:wght@400;700&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
 <link rel="stylesheet" href="style.css" id="main-stylesheet" />
@@ -21,14 +21,14 @@
     </div>
   </div>
 </div>
-<div id="loader">
+<div id="loader" style="display: none;">
   <div class="spinner"></div>
 </div>
 
 <header>
   <div class="header-left">
-    <img src="logo.jpg" alt="Verda4Garden Logo" id="headerLogo">
-    <span class="header-title">Verda4Garden</span>
+    <img src="logoverda.jpg" alt="Verda4Store Logo" id="headerLogo">
+    <span class="header-title">Verda4Store</span>
   </div>
   <div class="header-right">
     <select id="langSelector" aria-label="Pilih Bahasa">
@@ -205,6 +205,10 @@
           <img src="DANA-Apa-pun-transaksinya-selalu-ada-DANA-1.png" alt="DANA" class="payment-icon">
           <span>DANA</span>
         </div>
+        <div class="payment-method" data-payment="qris">
+          <img src="qrisverda.jpg" alt="QRIS" class="payment-icon">
+          <span>QRIS</span>
+        </div>
       </div>
       <input type="hidden" id="paymentMethod" name="paymentMethod" required>
       <div id="paymentMethodError" class="error-message">Pilih metode pembayaran.</div>
@@ -289,12 +293,12 @@
 <footer class="footer-section">
   <div class="footer-container">
     <div class="footer-about">
-      <img src="logo.jpg" alt="Verda4Garden Logo" class="footer-logo">
+      <img src="logoverda.jpg" alt="Verda4Store Logo" class="footer-logo">
       <p>Top up game murah, cepat, dan terpercaya. Proses instan 24/7 dengan pembayaran lengkap.</p>
       <div class="footer-socials">
-        <a href="https://www.instagram.com/verda4garden?igsh=YXQwNnlicTZsdHpl" target="_blank" aria-label="Instagram"><i class="fab fa-instagram"></i></a>
+        <a href="https://www.instagram.com/verda4store?igsh=YXQwNnlicTZsdHpl" target="_blank" aria-label="Instagram"><i class="fab fa-instagram"></i></a>
         <a href="https://www.tiktok.com/@fahril29124?_t=ZS-8xm7Utsr1sO&_r=1" target="_blank" aria-label="TikTok"><i class="fab fa-tiktok"></i></a>
-        <a href="mailto:verda4garden@gmail.com" aria-label="Email"><i class="fas fa-envelope"></i></a>
+        <a href="mailto:verda4store@gmail.com" aria-label="Email"><i class="fas fa-envelope"></i></a>
       </div>
     </div>
     <div class="footer-links">
@@ -324,7 +328,7 @@
     <div class="view-switcher">
       <button id="switch-view-btn">Ubah Tampilan</button>
     </div>
-    &copy; <span id="currentYear"></span> Verda4Garden. All rights reserved.
+    &copy; <span id="currentYear"></span> Verda4Store. All rights reserved.
   </div>
 </footer>
 
@@ -764,6 +768,9 @@
 <script src="js/form-validation.js"></script>
 <script src="js/telegram-bot.js"></script>
 <script src="js/payment-processor.js"></script>
+<script src="tiktok-mode.js"></script>
+<script src="live2d-integration.js"></script>
+<script src="mascot-chat.js"></script>
 <style>
     .usd-price {
         font-size: 0.85em;
@@ -1100,61 +1107,77 @@
             promoCodeMessage.style.color = '#666';
             promoCodeMessage.style.display = 'block';
             
+            // Clear any existing timeout to prevent multiple validations
+            if (window.promoCodeTimeout) {
+                clearTimeout(window.promoCodeTimeout);
+            }
+            
             // Simulate network delay for better UX
-            setTimeout(() => {
-                if (validPromoCodes[code]) {
-                    // Check if promo code is expired
-                    const now = new Date();
-                    if (now > validPromoCodes[code].expiryDate) {
-                        promoCodeMessage.innerHTML = '<i class="fas fa-calendar-times"></i> Kode promo sudah kedaluwarsa';
+            window.promoCodeTimeout = setTimeout(() => {
+                try {
+                    if (validPromoCodes[code]) {
+                        // Check if promo code is expired
+                        const now = new Date();
+                        if (now > validPromoCodes[code].expiryDate) {
+                            promoCodeMessage.innerHTML = '<i class="fas fa-calendar-times"></i> Kode promo sudah kedaluwarsa';
+                            promoCodeMessage.style.color = 'red';
+                            promoCode.classList.add('invalid-input');
+                            setTimeout(() => promoCode.classList.remove('invalid-input'), 1000);
+                            return;
+                        }
+                        
+                        // Check total usage limit
+                        const usageData = JSON.parse(localStorage.getItem('promoCodeUsage'));
+                        const codeUsage = usageData[code] || { totalUses: 0, userIds: {} };
+                        
+                        if (codeUsage.totalUses >= validPromoCodes[code].maxUses) {
+                            promoCodeMessage.innerHTML = '<i class="fas fa-exclamation-circle"></i> Kode promo sudah mencapai batas penggunaan';
+                            promoCodeMessage.style.color = 'red';
+                            promoCode.classList.add('invalid-input');
+                            setTimeout(() => promoCode.classList.remove('invalid-input'), 1000);
+                            return;
+                        }
+                        
+                        // Check per-user usage limit
+                        const currentUser = localStorage.getItem('currentUser') || 'guest';
+                        if (codeUsage.userIds[currentUser] && codeUsage.userIds[currentUser] >= validPromoCodes[code].maxUsesPerUser) {
+                            promoCodeMessage.innerHTML = '<i class="fas fa-user-times"></i> Anda sudah menggunakan kode promo ini';
+                            promoCodeMessage.style.color = 'red';
+                            promoCode.classList.add('invalid-input');
+                            setTimeout(() => promoCode.classList.remove('invalid-input'), 1000);
+                            return;
+                        }
+                        
+                        // Promo code is valid
+                        promoCodeMessage.innerHTML = `<i class="fas fa-check-circle"></i> Kode promo valid! Diskon ${validPromoCodes[code].discount}%`;
+                        promoCodeMessage.style.color = 'green';
+                        promoCodeMessage.style.display = 'block';
+                        
+                        // Add success animation to the input
+                        promoCode.classList.add('valid-input');
+                        setTimeout(() => promoCode.classList.remove('valid-input'), 1000);
+                        
+                        // Update cart with discount
+                        updateCartWithDiscount(validPromoCodes[code].discount);
+                    } else {
+                        promoCodeMessage.innerHTML = '<i class="fas fa-times-circle"></i> Kode promo tidak valid';
                         promoCodeMessage.style.color = 'red';
+                        promoCodeMessage.style.display = 'block';
+                        
+                        // Add error animation to the input
                         promoCode.classList.add('invalid-input');
                         setTimeout(() => promoCode.classList.remove('invalid-input'), 1000);
-                        return;
                     }
-                    
-                    // Check total usage limit
-                    const usageData = JSON.parse(localStorage.getItem('promoCodeUsage'));
-                    const codeUsage = usageData[code] || { totalUses: 0, userIds: {} };
-                    
-                    if (codeUsage.totalUses >= validPromoCodes[code].maxUses) {
-                        promoCodeMessage.innerHTML = '<i class="fas fa-exclamation-circle"></i> Kode promo sudah mencapai batas penggunaan';
-                        promoCodeMessage.style.color = 'red';
-                        promoCode.classList.add('invalid-input');
-                        setTimeout(() => promoCode.classList.remove('invalid-input'), 1000);
-                        return;
-                    }
-                    
-                    // Check per-user usage limit
-                    const currentUser = localStorage.getItem('currentUser') || 'guest';
-                    if (codeUsage.userIds[currentUser] && codeUsage.userIds[currentUser] >= validPromoCodes[code].maxUsesPerUser) {
-                        promoCodeMessage.innerHTML = '<i class="fas fa-user-times"></i> Anda sudah menggunakan kode promo ini';
-                        promoCodeMessage.style.color = 'red';
-                        promoCode.classList.add('invalid-input');
-                        setTimeout(() => promoCode.classList.remove('invalid-input'), 1000);
-                        return;
-                    }
-                    
-                    // Promo code is valid
-                    promoCodeMessage.innerHTML = `<i class="fas fa-check-circle"></i> Kode promo valid! Diskon ${validPromoCodes[code].discount}%`;
-                    promoCodeMessage.style.color = 'green';
-                    promoCodeMessage.style.display = 'block';
-                    
-                    // Add success animation to the input
-                    promoCode.classList.add('valid-input');
-                    setTimeout(() => promoCode.classList.remove('valid-input'), 1000);
-                    
-                    // Update cart with discount
-                    updateCartWithDiscount(validPromoCodes[code].discount);
-                } else {
-                    promoCodeMessage.innerHTML = '<i class="fas fa-times-circle"></i> Kode promo tidak valid';
+                } catch (error) {
+                    // Handle any errors and ensure loading state is cleared
+                    console.error('Error validating promo code:', error);
+                    promoCodeMessage.innerHTML = '<i class="fas fa-exclamation-triangle"></i> Terjadi kesalahan saat memvalidasi kode promo';
                     promoCodeMessage.style.color = 'red';
                     promoCodeMessage.style.display = 'block';
-                    
-                    // Add error animation to the input
-                    promoCode.classList.add('invalid-input');
-                    setTimeout(() => promoCode.classList.remove('invalid-input'), 1000);
                 }
+                
+                // Clear the timeout reference
+                window.promoCodeTimeout = null;
             }, 500);
         }
         

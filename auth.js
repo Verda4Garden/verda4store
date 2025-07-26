@@ -124,18 +124,134 @@ function setupRememberMe() {
     }
 }
 
-function setupSocialLogin() {
-    const googleButton = document.querySelector('.social-auth-button.google');
-    if (!googleButton) return;
-    
-    googleButton.addEventListener('click', function() {
-        // This is just a mock implementation
+// Google Sign-In functions
+function handleGoogleSignIn(response) {
+    try {
+        // Parse the credential response
+        const responsePayload = parseJwt(response.credential);
+        
+        // Extract user information
+        const userData = {
+            username: responsePayload.name,
+            email: responsePayload.email,
+            picture: responsePayload.picture,
+            googleId: responsePayload.sub
+        };
+        
+        // Store user data in localStorage/sessionStorage
+        sessionStorage.setItem('currentUser', JSON.stringify(userData));
+        
+        // Show success message
         const errorMessage = document.getElementById('errorMessage');
-        errorMessage.textContent = 'Social login akan segera tersedia!';
+        if (errorMessage) {
+            errorMessage.textContent = 'Login berhasil! Mengalihkan...';
+            errorMessage.style.display = 'block';
+            errorMessage.style.color = '#2ecc71';
+            errorMessage.style.backgroundColor = 'rgba(46, 204, 113, 0.1)';
+            errorMessage.style.borderLeft = '3px solid #2ecc71';
+        }
+        
+        // Redirect to home page after a short delay
+        setTimeout(() => {
+            window.location.href = 'home.html';
+        }, 1000);
+    } catch (error) {
+        console.error('Google Sign-In error:', error);
+        handleGoogleSignInError();
+    }
+}
+
+function handleGoogleSignUp(response) {
+    try {
+        // Parse the credential response
+        const responsePayload = parseJwt(response.credential);
+        
+        // Extract user information
+        const userData = {
+            username: responsePayload.name,
+            email: responsePayload.email,
+            picture: responsePayload.picture,
+            googleId: responsePayload.sub,
+            registeredAt: new Date().toISOString()
+        };
+        
+        // Store user in users array
+        let users = JSON.parse(localStorage.getItem('users')) || [];
+        
+        // Check if user already exists
+        const existingUser = users.find(u => u.email === userData.email || u.googleId === userData.googleId);
+        if (!existingUser) {
+            users.push(userData);
+            localStorage.setItem('users', JSON.stringify(users));
+        }
+        
+        // Store current user in session
+        sessionStorage.setItem('currentUser', JSON.stringify(userData));
+        
+        // Show success message
+        const errorMessage = document.getElementById('errorMessage');
+        if (errorMessage) {
+            errorMessage.textContent = 'Pendaftaran berhasil! Mengalihkan...';
+            errorMessage.style.display = 'block';
+            errorMessage.style.color = '#2ecc71';
+            errorMessage.style.backgroundColor = 'rgba(46, 204, 113, 0.1)';
+            errorMessage.style.borderLeft = '3px solid #2ecc71';
+        }
+        
+        // Redirect to home page after a short delay
+        setTimeout(() => {
+            window.location.href = 'home.html';
+        }, 1000);
+    } catch (error) {
+        console.error('Google Sign-Up error:', error);
+        handleGoogleSignInError();
+    }
+}
+
+function handleGoogleSignInError() {
+    const errorMessage = document.getElementById('errorMessage');
+    if (errorMessage) {
+        errorMessage.textContent = 'Untuk menggunakan login Google, admin perlu mengkonfigurasi Google OAuth Client ID. Silakan gunakan login biasa untuk saat ini.';
         errorMessage.style.display = 'block';
-        errorMessage.style.color = '#3498db';
-        errorMessage.style.backgroundColor = 'rgba(52, 152, 219, 0.1)';
-        errorMessage.style.borderLeft = '3px solid #3498db';
+        errorMessage.style.color = '#e67e22';
+        errorMessage.style.backgroundColor = 'rgba(230, 126, 34, 0.1)';
+        errorMessage.style.borderLeft = '3px solid #e67e22';
+    }
+}
+
+// Helper function to parse JWT token
+function parseJwt(token) {
+    try {
+        const base64Url = token.split('.')[1];
+        const base64 = base64Url.replace(/-/g, '+').replace(/_/g, '/');
+        const jsonPayload = decodeURIComponent(atob(base64).split('').map(function(c) {
+            return '%' + ('00' + c.charCodeAt(0).toString(16)).slice(-2);
+        }).join(''));
+
+        return JSON.parse(jsonPayload);
+    } catch (error) {
+        console.error('Error parsing JWT token:', error);
+        throw new Error('Invalid token format');
+    }
+}
+
+function setupSocialLogin() {
+    const customGoogleBtn = document.getElementById('customGoogleBtn');
+    if (!customGoogleBtn) return;
+    
+    customGoogleBtn.addEventListener('click', function() {
+        try {
+            // Check if Google Sign-In is properly configured
+            const googleSignInButton = document.querySelector('.g_id_signin div[role=button]');
+            if (googleSignInButton) {
+                googleSignInButton.click();
+            } else {
+                throw new Error('Google Sign-In button not found');
+            }
+        } catch (error) {
+            console.error('Error triggering Google Sign-In:', error);
+            handleGoogleSignInError();
+        }
     });
 }
 

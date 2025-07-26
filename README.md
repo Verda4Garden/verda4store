@@ -1,4 +1,4 @@
-# Verda4Garden E-commerce Website
+# Verda4Store E-commerce Website
 
 A responsive e-commerce website for game top-ups and virtual items, featuring multiple game options including Mobile Legends, PUBG Mobile, Free Fire, and Grow A Garden.
 

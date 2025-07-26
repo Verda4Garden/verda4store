@@ -179,7 +179,7 @@ function printInvoice(tx) {
     `);
     printWindow.document.write('</head><body>');
     printWindow.document.write('<div class="print-container">');
-    printWindow.document.write('<h1>Verda4Garden</h1>');
+    printWindow.document.write('<h1>Verda4Store</h1>');
     printWindow.document.write('<h2>Detail Invoice</h2>');
     printWindow.document.write(`<p><strong>Invoice:</strong> ${tx.invoiceId}</p>`);
     printWindow.document.write(`<p><strong>Tanggal:</strong> ${tx.date}</p>`);
