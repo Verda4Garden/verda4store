@@ -1,0 +1,465 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Hubungi Kami - Verda4Store</title>
+<link rel="icon" href="logoverda.jpg" type="image/jpeg">
+<meta name="description" content="Hubungi Verda4Store untuk pertanyaan, bantuan, atau kerjasama.">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+<style>
+    :root {
+        --primary-color: #3b82f6;
+        --primary-dark: #2563eb;
+        --primary-light: #60a5fa;
+        --dark-bg: #f8f9fa;
+        --card-bg: #ffffff;
+        --text-color: #333333;
+        --secondary-text: #6b7280;
+        --border-color: #e5e7eb;
+        --hover-color: #f3f4f6;
+        --accent-color: #3b82f6;
+        --success-color: #10b981;
+        --warning-color: #f59e0b;
+        --danger-color: #ef4444;
+    }
+    
+    body {
+        background-color: var(--dark-bg);
+        color: var(--text-color);
+        font-family: 'Inter', sans-serif;
+        margin: 0;
+        padding: 0;
+        line-height: 1.5;
+    }
+    
+    /* Header styling */
+    header {
+        background-color: var(--card-bg);
+        padding: 12px 24px;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+        position: sticky;
+        top: 0;
+        z-index: 100;
+    }
+    
+    .logo-container {
+        display: flex;
+        align-items: center;
+    }
+    
+    .menu-button {
+        background: none;
+        border: none;
+        font-size: 1.5rem;
+        color: var(--text-color);
+        cursor: pointer;
+        padding: 0;
+        margin-right: 16px;
+        transition: transform 0.2s ease;
+    }
+    
+    .menu-button:hover {
+        transform: scale(1.1);
+    }
+    
+    .logo {
+        font-size: 1.5rem;
+        font-weight: 700;
+        color: var(--text-color);
+        text-decoration: none;
+    }
+    
+    .logo span {
+        color: var(--primary-color);
+    }
+    
+    .header-actions {
+        display: flex;
+        align-items: center;
+        gap: 16px;
+    }
+    
+    .search-button, .lang-button {
+        background: none;
+        border: none;
+        font-size: 1.2rem;
+        color: var(--text-color);
+        cursor: pointer;
+        padding: 8px;
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        transition: all 0.2s ease;
+    }
+    
+    .search-button:hover, .lang-button:hover {
+        background-color: var(--hover-color);
+        transform: scale(1.1);
+    }
+    
+    /* Contact Form Styling */
+    .contact-container {
+        max-width: 800px;
+        margin: 40px auto;
+        padding: 0 20px;
+    }
+    
+    .contact-header {
+        text-align: center;
+        margin-bottom: 40px;
+    }
+    
+    .contact-header h1 {
+        font-size: 2.5rem;
+        color: var(--primary-color);
+        margin-bottom: 15px;
+    }
+    
+    .contact-header p {
+        font-size: 1.1rem;
+        color: var(--secondary-text);
+        max-width: 600px;
+        margin: 0 auto;
+    }
+    
+    .contact-content {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 40px;
+    }
+    
+    .contact-form {
+        background-color: var(--card-bg);
+        padding: 30px;
+        border-radius: 12px;
+        box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
+    }
+    
+    .form-group {
+        margin-bottom: 20px;
+    }
+    
+    .form-group label {
+        display: block;
+        margin-bottom: 8px;
+        font-weight: 500;
+        color: var(--text-color);
+    }
+    
+    .form-control {
+        width: 100%;
+        padding: 12px 15px;
+        border: 1px solid var(--border-color);
+        border-radius: 8px;
+        font-size: 1rem;
+        transition: all 0.3s;
+    }
+    
+    .form-control:focus {
+        outline: none;
+        border-color: var(--primary-color);
+        box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.2);
+    }
+    
+    textarea.form-control {
+        min-height: 150px;
+        resize: vertical;
+    }
+    
+    .submit-btn {
+        background-color: var(--primary-color);
+        color: white;
+        border: none;
+        padding: 12px 25px;
+        border-radius: 8px;
+        font-size: 1rem;
+        font-weight: 600;
+        cursor: pointer;
+        transition: all 0.3s;
+        display: inline-block;
+        text-align: center;
+        width: 100%;
+    }
+    
+    .submit-btn:hover {
+        background-color: var(--primary-dark);
+        transform: translateY(-2px);
+        box-shadow: 0 4px 10px rgba(59, 130, 246, 0.3);
+    }
+    
+    .contact-info {
+        background-color: var(--card-bg);
+        padding: 30px;
+        border-radius: 12px;
+        box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
+    }
+    
+    .contact-info h3 {
+        font-size: 1.5rem;
+        color: var(--primary-color);
+        margin-bottom: 20px;
+        padding-bottom: 10px;
+        border-bottom: 2px solid var(--primary-light);
+    }
+    
+    .info-item {
+        display: flex;
+        align-items: flex-start;
+        margin-bottom: 25px;
+    }
+    
+    .info-icon {
+        width: 40px;
+        height: 40px;
+        background-color: rgba(59, 130, 246, 0.1);
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        margin-right: 15px;
+        color: var(--primary-color);
+        font-size: 1.2rem;
+    }
+    
+    .info-content h4 {
+        margin: 0 0 5px 0;
+        font-size: 1.1rem;
+        color: var(--text-color);
+    }
+    
+    .info-content p, .info-content a {
+        margin: 0;
+        color: var(--secondary-text);
+        text-decoration: none;
+        transition: color 0.3s;
+    }
+    
+    .info-content a:hover {
+        color: var(--primary-color);
+    }
+    
+    .social-links {
+        display: flex;
+        gap: 15px;
+        margin-top: 30px;
+    }
+    
+    .social-link {
+        width: 40px;
+        height: 40px;
+        background-color: rgba(59, 130, 246, 0.1);
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        color: var(--primary-color);
+        font-size: 1.2rem;
+        transition: all 0.3s;
+    }
+    
+    .social-link:hover {
+        background-color: var(--primary-color);
+        color: white;
+        transform: translateY(-3px);
+        box-shadow: 0 5px 10px rgba(59, 130, 246, 0.3);
+    }
+    
+    /* Responsive adjustments */
+    @media (max-width: 768px) {
+        .contact-content {
+            grid-template-columns: 1fr;
+        }
+        
+        .contact-info {
+            order: -1;
+        }
+    }
+</style>
+</head>
+<body>
+<header>
+    <div class="logo-container">
+        <button class="menu-button" aria-label="Menu" id="openSideNav">
+            <i class="fas fa-bars"></i>
+        </button>
+        <a href="home.html" class="logo">Verda4<span>Store</span></a>
+    </div>
+    <div class="header-actions">
+        <a href="register.html" class="register-button">
+            <i class="fas fa-user-plus"></i> Daftar
+        </a>
+        <div class="lang-selector">
+            <button class="lang-button" aria-label="Change language">
+                <i class="fas fa-globe"></i>
+            </button>
+        </div>
+    </div>
+</header>
+
+<div class="contact-container">
+    <div class="contact-header">
+        <h1>Hubungi Kami</h1>
+        <p>Punya pertanyaan atau butuh bantuan? Jangan ragu untuk menghubungi kami. Tim kami siap membantu Anda.</p>
+    </div>
+    
+    <div class="contact-content">
+        <div class="contact-form">
+            <form id="contactForm" action="https://formsubmit.co/verda4store@gmail.com" method="POST">
+                <div class="form-group">
+                    <label for="name">Nama</label>
+                    <input type="text" id="name" name="name" class="form-control" required>
+                </div>
+                
+                <div class="form-group">
+                    <label for="email">Email</label>
+                    <input type="email" id="email" name="email" class="form-control" required>
+                </div>
+                
+                <div class="form-group">
+                    <label for="subject">Subjek</label>
+                    <input type="text" id="subject" name="subject" class="form-control" required>
+                </div>
+                
+                <div class="form-group">
+                    <label for="message">Pesan</label>
+                    <textarea id="message" name="message" class="form-control" required></textarea>
+                </div>
+                
+                <button type="submit" class="submit-btn">Kirim Pesan</button>
+                
+                <!-- Hidden fields for FormSubmit configuration -->
+                <input type="hidden" name="_next" value="thank-you.html">
+                <input type="hidden" name="_subject" value="Pesan Baru dari Website Verda4Store">
+                <input type="hidden" name="_captcha" value="false">
+                <input type="hidden" name="_template" value="table">
+                <input type="hidden" name="_autoresponse" value="Terima kasih telah menghubungi Verda4Store. Kami telah menerima pesan Anda dan akan segera merespons dalam waktu 24 jam. Salam, Tim Verda4Store.">
+                <!-- Honeypot field to prevent spam -->
+                <input type="text" name="_honey" style="display:none">
+            </form>
+        </div>
+        
+        <div class="contact-info">
+            <h3>Informasi Kontak</h3>
+            
+            <div class="info-item">
+                <div class="info-icon">
+                    <i class="fas fa-envelope"></i>
+                </div>
+                <div class="info-content">
+                    <h4>Email</h4>
+                    <a href="https://mail.google.com/mail/?view=cm&fs=1&to=verda4store@gmail.com" target="_blank">verda4store@gmail.com</a>
+                </div>
+            </div>
+            
+            <div class="info-item">
+                <div class="info-icon">
+                    <i class="fas fa-clock"></i>
+                </div>
+                <div class="info-content">
+                    <h4>Jam Operasional</h4>
+                    <p>Senin - Minggu: 24 Jam</p>
+                </div>
+            </div>
+            
+            <div class="info-item">
+                <div class="info-icon">
+                    <i class="fas fa-headset"></i>
+                </div>
+                <div class="info-content">
+                    <h4>Dukungan Pelanggan</h4>
+                    <p>Kami siap membantu Anda 24/7</p>
+                </div>
+            </div>
+            
+            <h3>Ikuti Kami</h3>
+            <div class="social-links">
+                <a href="https://www.instagram.com/verda4store?igsh=YXQwNnlicTZsdHpl" target="_blank" class="social-link" aria-label="Instagram">
+                    <i class="fab fa-instagram"></i>
+                </a>
+                <a href="https://www.tiktok.com/@fahril29124?_t=ZS-8xm7Utsr1sO&_r=1" target="_blank" class="social-link" aria-label="TikTok">
+                    <i class="fab fa-tiktok"></i>
+                </a>
+                <a href="https://mail.google.com/mail/?view=cm&fs=1&to=verda4store@gmail.com" target="_blank" class="social-link" aria-label="Email">
+                    <i class="fas fa-envelope"></i>
+                </a>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!--
+PANDUAN PENGGUNAAN FORMSUBMIT (BAHASA INDONESIA):
+
+1. AKTIVASI EMAIL:
+   - Setelah pertama kali menggunakan FormSubmit, cek email verda4store@gmail.com
+   - Cari email dari FormSubmit yang berisi link aktivasi
+   - Klik link aktivasi tersebut untuk mengaktifkan layanan
+
+2. CARA CEK APAKAH FORM BERFUNGSI:
+   - Setelah mengaktivasi email, buka halaman contact.html
+   - Isi semua kolom form dengan data uji
+   - Kirim form dan pastikan Anda diarahkan ke halaman thank-you.html
+   - Cek email verda4store@gmail.com, pesan yang dikirim seharusnya masuk ke inbox
+
+3. JIKA PESAN TIDAK MASUK:
+   - Pastikan email sudah diaktivasi melalui link di email FormSubmit
+   - Pastikan website diakses melalui domain asli, bukan localhost
+   - Cek folder Spam/Junk di email verda4store@gmail.com
+
+4. CARA MELIHAT ISI PESAN:
+   - Semua pesan yang dikirim melalui form akan masuk ke email verda4store@gmail.com
+   - Pesan akan diformat dalam bentuk tabel yang mudah dibaca
+   - Subjek email akan berisi "Pesan Baru dari Website Verda4Store"
+-->
+
+<script>
+    document.addEventListener('DOMContentLoaded', () => {
+        // Menu button functionality
+        const openSideNavBtn = document.getElementById('openSideNav');
+        
+        if (openSideNavBtn) {
+            openSideNavBtn.addEventListener('click', function() {
+                window.location.href = 'home.html';
+            });
+        }
+        
+        // Form submission handling
+        const contactForm = document.getElementById('contactForm');
+        
+        if (contactForm) {
+            contactForm.addEventListener('submit', function(event) {
+                // Form validation
+                const name = document.getElementById('name').value.trim();
+                const email = document.getElementById('email').value.trim();
+                const subject = document.getElementById('subject').value.trim();
+                const message = document.getElementById('message').value.trim();
+                
+                if (!name || !email || !subject || !message) {
+                    alert('Mohon isi semua kolom yang diperlukan');
+                    event.preventDefault();
+                    return false;
+                }
+                
+                // Email validation
+                const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+                if (!emailRegex.test(email)) {
+                    alert('Mohon masukkan alamat email yang valid');
+                    event.preventDefault();
+                    return false;
+                }
+                
+                // If validation passes, let FormSubmit handle the submission
+                console.log('Form submitted successfully');
+                // Don't prevent default - let the form submit normally to FormSubmit
+            });
+        }
+    });
+</script>
+</body>
+</html>

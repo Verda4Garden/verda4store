@@ -1,0 +1,33 @@
+{
+  "Version": 3,
+  "FileReferences": {
+    "Moc": "taiga.moc3",
+    "Textures": [
+      "taiga.png"
+    ],
+    "Physics": "taiga.physics3.json",
+    "Pose": "taiga.pose3.json",
+    "Expressions": [
+      {"Name": "default", "File": "expressions/default.exp3.json"},
+      {"Name": "happy", "File": "expressions/happy.exp3.json"},
+      {"Name": "sad", "File": "expressions/sad.exp3.json"},
+      {"Name": "angry", "File": "expressions/angry.exp3.json"},
+      {"Name": "surprised", "File": "expressions/surprised.exp3.json"}
+    ],
+    "Motions": {
+      "Idle": [
+        {"File": "motions/idle.motion3.json", "FadeInTime": 0.5, "FadeOutTime": 0.5}
+      ],
+      "TapBody": [
+        {"File": "motions/tap_body.motion3.json", "FadeInTime": 0.5, "FadeOutTime": 0.5}
+      ]
+    }
+  },
+  "Groups": [
+    {"Target": "Parameter", "Name": "EyeBlink", "Ids": ["ParamEyeLOpen", "ParamEyeROpen"]}
+  ],
+  "HitAreas": [
+    {"Name": "Head", "Id": "Head"},
+    {"Name": "Body", "Id": "Body"}
+  ]
+}

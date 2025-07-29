@@ -1,0 +1,609 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Admin - Konfirmasi Pengiriman - Verda4Store</title>
+<link rel="icon" href="logoverda.jpg" type="image/jpeg">
+<link href="https://fonts.googleapis.com/css2?family=Segoe+UI:wght@400;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+<link rel="stylesheet" href="style.css" id="main-stylesheet" />
+<style>
+    .admin-container {
+        max-width: 600px;
+        margin: 40px auto;
+        padding: 20px;
+        background-color: var(--card-background);
+        border-radius: 12px;
+        box-shadow: 0 8px 16px rgba(0,0,0,0.2);
+    }
+    
+    .admin-header {
+        display: flex;
+        align-items: center;
+        gap: 15px;
+        margin-bottom: 20px;
+        padding-bottom: 15px;
+        border-bottom: 1px solid var(--border-color);
+    }
+    
+    .admin-header i {
+        font-size: 1.8em;
+        color: var(--primary-color);
+    }
+    
+    .admin-header h1 {
+        margin: 0;
+        color: var(--primary-text);
+    }
+    
+    .form-group {
+        margin-bottom: 20px;
+    }
+    
+    .form-group label {
+        display: block;
+        margin-bottom: 8px;
+        font-weight: bold;
+        color: var(--primary-text);
+    }
+    
+    .form-group input, .form-group textarea {
+        width: 100%;
+        padding: 12px;
+        border-radius: 8px;
+        border: 1px solid var(--border-color);
+        background-color: var(--background-tertiary);
+        color: var(--primary-text);
+        font-size: 1em;
+    }
+    
+    .form-group textarea {
+        resize: vertical;
+        min-height: 100px;
+    }
+    
+    .form-actions {
+        display: flex;
+        justify-content: flex-end;
+        gap: 15px;
+    }
+    
+    .admin-button {
+        padding: 12px 20px;
+        border-radius: 8px;
+        cursor: pointer;
+        font-size: 1em;
+        font-weight: bold;
+        transition: all 0.3s ease;
+    }
+    
+    .admin-button.primary {
+        background-color: var(--primary-color);
+        color: white;
+        border: none;
+    }
+    
+    .admin-button.secondary {
+        background-color: var(--background-tertiary);
+        color: var(--primary-text);
+        border: 1px solid var(--border-color);
+    }
+    
+    .admin-button:hover {
+        transform: translateY(-3px);
+        box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+    }
+    
+    .admin-button.primary:hover {
+        background-color: #d43a50;
+    }
+    
+    .admin-button.secondary:hover {
+        background-color: var(--background-secondary);
+    }
+    
+    .result-message {
+        margin-top: 20px;
+        padding: 15px;
+        border-radius: 8px;
+        text-align: center;
+        font-weight: bold;
+        display: none;
+    }
+    
+    .result-message.success {
+        background-color: rgba(40, 167, 69, 0.2);
+        color: #28a745;
+        border: 1px solid #28a745;
+    }
+    
+    .result-message.error {
+        background-color: rgba(220, 53, 69, 0.2);
+        color: #dc3545;
+        border: 1px solid #dc3545;
+    }
+    
+    .login-container {
+        max-width: 400px;
+        margin: 100px auto;
+        padding: 30px;
+        background-color: var(--card-background);
+        border-radius: 12px;
+        box-shadow: 0 8px 16px rgba(0,0,0,0.2);
+        text-align: center;
+    }
+    
+    .login-container h2 {
+        margin-bottom: 20px;
+        color: var(--primary-text);
+    }
+    
+    .login-form {
+        display: flex;
+        flex-direction: column;
+        gap: 15px;
+    }
+    
+    .login-form input {
+        padding: 12px;
+        border-radius: 8px;
+        border: 1px solid var(--border-color);
+        background-color: var(--background-tertiary);
+        color: var(--primary-text);
+        font-size: 1em;
+    }
+    
+    .login-form button {
+        padding: 12px;
+        border-radius: 8px;
+        background-color: var(--primary-color);
+        color: white;
+        border: none;
+        cursor: pointer;
+        font-size: 1em;
+        font-weight: bold;
+        transition: all 0.3s ease;
+    }
+    
+    .login-form button:hover {
+        background-color: #d43a50;
+        transform: translateY(-2px);
+    }
+    
+    .login-error {
+        color: #dc3545;
+        margin-top: 15px;
+        display: none;
+    }
+    
+    .order-info {
+        margin-top: 20px;
+        padding: 15px;
+        background-color: var(--background-tertiary);
+        border-radius: 8px;
+        border: 1px solid var(--border-color);
+    }
+    
+    .order-info-row {
+        display: flex;
+        justify-content: space-between;
+        margin-bottom: 10px;
+        padding-bottom: 10px;
+        border-bottom: 1px dashed var(--border-color);
+    }
+    
+    .order-info-row:last-child {
+        margin-bottom: 0;
+        padding-bottom: 0;
+        border-bottom: none;
+    }
+</style>
+</head>
+<body>
+
+<div id="loginSection" class="login-container">
+    <h2><i class="fas fa-lock"></i> Admin Login</h2>
+    <form id="loginForm" class="login-form">
+        <input type="password" id="adminPassword" placeholder="Masukkan password admin" required>
+        <button type="submit">Login</button>
+    </form>
+    <p id="loginError" class="login-error">Password salah. Silakan coba lagi.</p>
+</div>
+
+<div id="adminSection" class="admin-container" style="display: none;">
+    <div class="admin-header">
+        <i class="fas fa-shipping-fast"></i>
+        <h1>Konfirmasi Pengiriman Pesanan</h1>
+    </div>
+    
+    <form id="fulfillForm">
+        <div class="form-group">
+            <label for="invoiceId">ID Invoice:</label>
+            <input type="text" id="invoiceId" placeholder="Masukkan ID Invoice (contoh: MLBB-1234567890)" required>
+        </div>
+        
+        <div id="orderInfoContainer" style="display: none;">
+            <div class="order-info">
+                <div class="order-info-row">
+                    <strong>Status:</strong>
+                    <span id="orderStatus"></span>
+                </div>
+                <div class="order-info-row">
+                    <strong>Nama Akun:</strong>
+                    <span id="orderAccount"></span>
+                </div>
+                <div class="order-info-row">
+                    <strong>Produk:</strong>
+                    <span id="orderProduct"></span>
+                </div>
+                <div class="order-info-row">
+                    <strong>Total:</strong>
+                    <span id="orderTotal"></span>
+                </div>
+            </div>
+        </div>
+        
+        <div class="form-group">
+            <label for="fulfillmentNotes">Catatan Pengiriman (opsional):</label>
+            <textarea id="fulfillmentNotes" placeholder="Masukkan catatan pengiriman jika ada..."></textarea>
+        </div>
+        
+        <div class="form-actions">
+            <button type="button" id="checkOrderBtn" class="admin-button secondary">Cek Pesanan</button>
+            <button type="submit" id="confirmFulfillBtn" class="admin-button primary" disabled>Konfirmasi Pengiriman</button>
+        </div>
+    </form>
+    
+    <div id="resultMessage" class="result-message"></div>
+</div>
+
+<script src="js/telegram-bot.js"></script>
+<script>
+// Telegram Bot Configuration - Same as in telegram-bot.js for consistency
+const TELEGRAM_CONFIG = {
+    botToken: "7985620779:AAE7RJ2twsG6r4SgOXQsMFKH5zsOnKwIPMQ", // Bot token
+    chatId: "-4696626660"      // Group Chat ID
+};
+
+document.addEventListener('DOMContentLoaded', () => {
+    const loginSection = document.getElementById('loginSection');
+    const adminSection = document.getElementById('adminSection');
+    const loginForm = document.getElementById('loginForm');
+    const loginError = document.getElementById('loginError');
+    const fulfillForm = document.getElementById('fulfillForm');
+    const invoiceIdInput = document.getElementById('invoiceId');
+    const fulfillmentNotesInput = document.getElementById('fulfillmentNotes');
+    const checkOrderBtn = document.getElementById('checkOrderBtn');
+    const confirmFulfillBtn = document.getElementById('confirmFulfillBtn');
+    const resultMessage = document.getElementById('resultMessage');
+    const orderInfoContainer = document.getElementById('orderInfoContainer');
+    const orderStatus = document.getElementById('orderStatus');
+    const orderAccount = document.getElementById('orderAccount');
+    const orderProduct = document.getElementById('orderProduct');
+    const orderTotal = document.getElementById('orderTotal');
+    
+    // Admin password (in a real application, this should be handled server-side)
+    const ADMIN_PASSWORD = 'verda4garden';
+    
+    // Check if already logged in
+    const isLoggedIn = sessionStorage.getItem('adminLoggedIn') === 'true';
+    if (isLoggedIn) {
+        loginSection.style.display = 'none';
+        adminSection.style.display = 'block';
+    }
+    
+    // Login form submission
+    loginForm.addEventListener('submit', (e) => {
+        e.preventDefault();
+        const password = document.getElementById('adminPassword').value;
+        
+        if (password === ADMIN_PASSWORD) {
+            sessionStorage.setItem('adminLoggedIn', 'true');
+            loginSection.style.display = 'none';
+            adminSection.style.display = 'block';
+            loginError.style.display = 'none';
+        } else {
+            loginError.style.display = 'block';
+            document.getElementById('adminPassword').value = '';
+        }
+    });
+    
+    // Check order button
+    checkOrderBtn.addEventListener('click', () => {
+        const invoiceId = invoiceIdInput.value.trim();
+        if (!invoiceId) {
+            showResultMessage('Silakan masukkan ID Invoice', 'error');
+            return;
+        }
+        
+        // Get order data from localStorage
+        const orderData = localStorage.getItem(invoiceId);
+        if (!orderData) {
+            showResultMessage('Pesanan tidak ditemukan. Periksa kembali ID Invoice', 'error');
+            orderInfoContainer.style.display = 'none';
+            confirmFulfillBtn.disabled = true;
+            return;
+        }
+        
+        const order = JSON.parse(orderData);
+        
+        // Determine status
+        let status;
+        if (order.status === 'fulfilled') {
+            status = 'Terkirim';
+            confirmFulfillBtn.disabled = true;
+        } else if (order.status === 'paid' || order.paymentDate) {
+            status = 'Dibayar';
+            confirmFulfillBtn.disabled = false;
+        } else {
+            status = 'Menunggu Pembayaran';
+            confirmFulfillBtn.disabled = true;
+        }
+        
+        // Update order info
+        orderStatus.textContent = status;
+        orderAccount.textContent = order.buyerName;
+        orderProduct.textContent = order.cart && order.cart.length > 0 ? order.cart[0].name : 'Tidak ada produk';
+        orderTotal.textContent = formatPrice(order.total);
+        
+        // Show order info
+        orderInfoContainer.style.display = 'block';
+        
+        // Show appropriate message
+        if (order.status === 'fulfilled') {
+            showResultMessage('Pesanan ini sudah ditandai sebagai terkirim pada ' + order.fulfillmentDate, 'error');
+        } else if (status === 'Menunggu Pembayaran') {
+            showResultMessage('Pesanan ini belum dibayar. Tidak dapat menandai sebagai terkirim.', 'error');
+        } else {
+            showResultMessage('Pesanan ditemukan. Klik "Konfirmasi Pengiriman" untuk menandai sebagai terkirim.', 'success');
+        }
+    });
+    
+    // Fulfill form submission
+    fulfillForm.addEventListener('submit', async (e) => {
+        e.preventDefault();
+        
+        const invoiceId = invoiceIdInput.value.trim();
+        const notes = fulfillmentNotesInput.value.trim();
+        
+        if (!invoiceId) {
+            showResultMessage('Silakan masukkan ID Invoice', 'error');
+            return;
+        }
+        
+        // Show loading state
+        confirmFulfillBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Memproses...';
+        confirmFulfillBtn.disabled = true;
+        
+        try {
+            // Mark order as fulfilled
+            const success = await markOrderAsFulfilled(invoiceId, notes);
+            
+            if (success) {
+                showResultMessage('Pesanan berhasil ditandai sebagai terkirim!', 'success');
+                
+                // Reset form
+                fulfillmentNotesInput.value = '';
+                
+                // Update order info
+                orderStatus.textContent = 'Terkirim';
+                confirmFulfillBtn.disabled = true;
+            } else {
+                showResultMessage('Gagal menandai pesanan sebagai terkirim. Silakan coba lagi.', 'error');
+                confirmFulfillBtn.disabled = false;
+            }
+        } catch (error) {
+            console.error('Error marking order as fulfilled:', error);
+            showResultMessage('Terjadi kesalahan: ' + error.message, 'error');
+            confirmFulfillBtn.disabled = false;
+        } finally {
+            // Reset button state
+            confirmFulfillBtn.innerHTML = 'Konfirmasi Pengiriman';
+        }
+    });
+    
+    // Helper function to show result message
+    function showResultMessage(message, type) {
+        resultMessage.textContent = message;
+        resultMessage.className = 'result-message ' + type;
+        resultMessage.style.display = 'block';
+        
+        // Scroll to message
+        resultMessage.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+    }
+    
+    // Helper function to format price
+    function formatPrice(num) {
+        return 'Rp ' + num.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ".");
+    }
+    
+    /**
+     * Mark an order as fulfilled and send notification to Telegram
+     * @param {string} invoiceId - The invoice ID
+     * @param {string} notes - Optional fulfillment notes
+     * @returns {Promise<boolean>} - Whether the operation was successful
+     */
+    async function markOrderAsFulfilled(invoiceId, notes) {
+        try {
+            // Get order data from localStorage
+            const orderData = localStorage.getItem(invoiceId);
+            if (!orderData) {
+                throw new Error('Order not found');
+            }
+            
+            const order = JSON.parse(orderData);
+            
+            // Check if order is already fulfilled
+            if (order.status === 'fulfilled') {
+                throw new Error('Order is already fulfilled');
+            }
+            
+            // Check if order is paid
+            if (order.status !== 'paid' && !order.paymentDate) {
+                throw new Error('Order is not paid yet');
+            }
+            
+            // Update order status
+            order.status = 'fulfilled';
+            order.fulfillmentDate = new Date().toLocaleString('id-ID', {
+                year: 'numeric',
+                month: 'long',
+                day: 'numeric',
+                hour: '2-digit',
+                minute: '2-digit'
+            });
+            
+            if (notes) {
+                order.fulfillmentNotes = notes;
+            }
+            
+            // Save updated order to localStorage
+            localStorage.setItem(invoiceId, JSON.stringify(order));
+            
+            // Send fulfillment notification to Telegram
+            const fulfillmentData = {
+                invoiceId: order.invoiceId,
+                buyerName: order.buyerName,
+                paymentMethod: order.paymentMethod,
+                amount: order.total,
+                fulfillmentDate: order.fulfillmentDate,
+                notes: notes || ''
+            };
+            
+            // Send notification to Telegram
+            await sendFulfillmentToTelegram(fulfillmentData);
+            
+            return true;
+        } catch (error) {
+            console.error('Error marking order as fulfilled:', error);
+            throw error;
+        }
+    }
+});
+
+/**
+ * Send fulfillment notification to Telegram bot
+ * @param {Object} fulfillmentData - Fulfillment data
+ * @returns {Promise<boolean>} - Whether the message was sent successfully
+ */
+async function sendFulfillmentToTelegram(fulfillmentData) {
+    try {
+        // Format message for Telegram
+        const message = formatFulfillmentMessage(fulfillmentData);
+        
+        // Determine if we're in a local environment or deployed
+        const isLocal = window.location.hostname === 'localhost' ||
+                        window.location.hostname === '127.0.0.1' ||
+                        window.location.protocol === 'file:';
+        
+        let response;
+        
+        if (isLocal) {
+            // If running locally, call Telegram API directly
+            console.log('Running in local environment, calling Telegram API directly');
+            response = await fetch(`https://api.telegram.org/bot${TELEGRAM_CONFIG.botToken}/sendMessage`, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({
+                    chat_id: TELEGRAM_CONFIG.chatId,
+                    text: message,
+                    parse_mode: 'HTML'
+                })
+            });
+            
+            const data = await response.json();
+            return {
+                success: data.ok,
+                error: data.ok ? null : data.description
+            };
+        } else {
+            // If deployed, use the serverless function
+            console.log('Running in deployed environment, using serverless function');
+            response = await fetch('/api/telegram', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({
+                    message: message,
+                    chatId: TELEGRAM_CONFIG.chatId,
+                    botToken: TELEGRAM_CONFIG.botToken // Pass the bot token to the serverless function
+                })
+            });
+        }
+        
+        let result;
+        
+        // If we're in a local environment, we've already processed the response
+        if (isLocal) {
+            result = response;
+        } else {
+            // Otherwise, parse the response from the serverless function
+            try {
+                result = await response.json();
+            } catch (parseError) {
+                console.error('Error parsing response:', parseError);
+                console.error('Response status:', response.status);
+                console.error('Response text:', await response.text());
+                
+                return false;
+            }
+        }
+        
+        if (!result.success) {
+            console.error('Failed to send fulfillment notification to Telegram:', result.error);
+            console.error('Error details:', result.details || 'No details available');
+            
+            // Display error in console for debugging
+            console.group('Telegram Error Details');
+            console.error('Status:', response.status);
+            console.error('Error:', result.error);
+            console.error('Details:', result.details || 'None');
+            console.groupEnd();
+            
+            return false;
+        }
+        
+        console.log('Fulfillment notification sent to Telegram successfully');
+        return true;
+    } catch (error) {
+        console.error('Error sending fulfillment notification to Telegram:', error);
+        return false;
+    }
+}
+
+/**
+ * Format fulfillment data for Telegram message
+ * @param {Object} fulfillmentData - Fulfillment data
+ * @returns {String} - Formatted message
+ */
+function formatFulfillmentMessage(fulfillmentData) {
+    // Get game name from invoice prefix
+    let gameName = "Game";
+    if (fulfillmentData.invoiceId.startsWith("PUBG-")) {
+        gameName = "PUBG Mobile";
+    } else if (fulfillmentData.invoiceId.startsWith("MLBB-")) {
+        gameName = "Mobile Legends";
+    } else if (fulfillmentData.invoiceId.startsWith("FF-")) {
+        gameName = "Free Fire";
+    }
+    
+    // Format message with HTML formatting
+    let message = `<b>✅ Pesanan Terkirim: ${gameName}</b>\n\n`;
+    message += `<b>📋 Invoice ID:</b> ${fulfillmentData.invoiceId}\n`;
+    message += `<b>👤 Player ID:</b> ${fulfillmentData.buyerName}\n`;
+    message += `<b>💰 Total:</b> Rp ${fulfillmentData.amount.toLocaleString('id-ID')}\n`;
+    message += `<b>🕒 Tanggal Pengiriman:</b> ${fulfillmentData.fulfillmentDate}\n`;
+    
+    if (fulfillmentData.notes) {
+        message += `\n<b>📝 Catatan:</b> ${fulfillmentData.notes}\n`;
+    }
+    
+    return message;
+}
+</script>
+</body>
+</html>

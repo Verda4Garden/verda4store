@@ -1,0 +1,205 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Terima Kasih - Verda4Store</title>
+<link rel="icon" href="logoverda.jpg" type="image/jpeg">
+<meta name="description" content="Terima kasih telah menghubungi Verda4Store.">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+<style>
+    :root {
+        --primary-color: #3b82f6;
+        --primary-dark: #2563eb;
+        --primary-light: #60a5fa;
+        --dark-bg: #f8f9fa;
+        --card-bg: #ffffff;
+        --text-color: #333333;
+        --secondary-text: #6b7280;
+        --border-color: #e5e7eb;
+        --hover-color: #f3f4f6;
+        --accent-color: #3b82f6;
+        --success-color: #10b981;
+        --warning-color: #f59e0b;
+        --danger-color: #ef4444;
+    }
+    
+    body {
+        background-color: var(--dark-bg);
+        color: var(--text-color);
+        font-family: 'Inter', sans-serif;
+        margin: 0;
+        padding: 0;
+        line-height: 1.5;
+    }
+    
+    /* Header styling */
+    header {
+        background-color: var(--card-bg);
+        padding: 12px 24px;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+        position: sticky;
+        top: 0;
+        z-index: 100;
+    }
+    
+    .logo-container {
+        display: flex;
+        align-items: center;
+    }
+    
+    .menu-button {
+        background: none;
+        border: none;
+        font-size: 1.5rem;
+        color: var(--text-color);
+        cursor: pointer;
+        padding: 0;
+        margin-right: 16px;
+        transition: transform 0.2s ease;
+    }
+    
+    .menu-button:hover {
+        transform: scale(1.1);
+    }
+    
+    .logo {
+        font-size: 1.5rem;
+        font-weight: 700;
+        color: var(--text-color);
+        text-decoration: none;
+    }
+    
+    .logo span {
+        color: var(--primary-color);
+    }
+    
+    .header-actions {
+        display: flex;
+        align-items: center;
+        gap: 16px;
+    }
+    
+    .search-button, .lang-button {
+        background: none;
+        border: none;
+        font-size: 1.2rem;
+        color: var(--text-color);
+        cursor: pointer;
+        padding: 8px;
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        transition: all 0.2s ease;
+    }
+    
+    .search-button:hover, .lang-button:hover {
+        background-color: var(--hover-color);
+        transform: scale(1.1);
+    }
+    
+    /* Thank You Content Styling */
+    .thank-you-container {
+        max-width: 800px;
+        margin: 80px auto;
+        padding: 0 20px;
+        text-align: center;
+    }
+    
+    .thank-you-card {
+        background-color: var(--card-bg);
+        padding: 40px;
+        border-radius: 12px;
+        box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
+    }
+    
+    .thank-you-icon {
+        font-size: 4rem;
+        color: var(--success-color);
+        margin-bottom: 20px;
+    }
+    
+    .thank-you-card h1 {
+        font-size: 2.5rem;
+        color: var(--primary-color);
+        margin-bottom: 15px;
+    }
+    
+    .thank-you-card p {
+        font-size: 1.1rem;
+        color: var(--secondary-text);
+        max-width: 600px;
+        margin: 0 auto 30px auto;
+    }
+    
+    .back-button {
+        background-color: var(--primary-color);
+        color: white;
+        border: none;
+        padding: 12px 25px;
+        border-radius: 8px;
+        font-size: 1rem;
+        font-weight: 600;
+        cursor: pointer;
+        transition: all 0.3s;
+        display: inline-block;
+        text-decoration: none;
+    }
+    
+    .back-button:hover {
+        background-color: var(--primary-dark);
+        transform: translateY(-2px);
+        box-shadow: 0 4px 10px rgba(59, 130, 246, 0.3);
+    }
+</style>
+</head>
+<body>
+<header>
+    <div class="logo-container">
+        <button class="menu-button" aria-label="Menu" id="openSideNav">
+            <i class="fas fa-bars"></i>
+        </button>
+        <a href="home.html" class="logo">Verda4<span>Store</span></a>
+    </div>
+    <div class="header-actions">
+        <a href="register.html" class="register-button">
+            <i class="fas fa-user-plus"></i> Daftar
+        </a>
+        <div class="lang-selector">
+            <button class="lang-button" aria-label="Change language">
+                <i class="fas fa-globe"></i>
+            </button>
+        </div>
+    </div>
+</header>
+
+<div class="thank-you-container">
+    <div class="thank-you-card">
+        <div class="thank-you-icon">
+            <i class="fas fa-check-circle"></i>
+        </div>
+        <h1>Terima Kasih!</h1>
+        <p>Pesan Anda telah berhasil dikirim. Tim kami akan segera menghubungi Anda dalam waktu 24 jam.</p>
+        <a href="home.html" class="back-button">Kembali ke Beranda</a>
+    </div>
+</div>
+
+<script>
+    document.addEventListener('DOMContentLoaded', () => {
+        // Menu button functionality
+        const openSideNavBtn = document.getElementById('openSideNav');
+        
+        if (openSideNavBtn) {
+            openSideNavBtn.addEventListener('click', function() {
+                window.location.href = 'home.html';
+            });
+        }
+    });
+</script>
+</body>
+</html>

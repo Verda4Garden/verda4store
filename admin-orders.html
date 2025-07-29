@@ -1,0 +1,988 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Admin Panel - Verda4Store</title>
+<link rel="icon" href="logoverda.jpg" type="image/jpeg">
+<link href="https://fonts.googleapis.com/css2?family=Segoe+UI:wght@400;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+<link rel="stylesheet" href="style.css" id="main-stylesheet" />
+<style>
+    .admin-container {
+        max-width: 1200px;
+        margin: 40px auto;
+        padding: 20px;
+    }
+    
+    .admin-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 30px;
+        padding-bottom: 15px;
+        border-bottom: 1px solid var(--border-color);
+    }
+    
+    .admin-title {
+        display: flex;
+        align-items: center;
+        gap: 15px;
+    }
+    
+    .admin-title i {
+        font-size: 1.8em;
+        color: var(--primary-color);
+    }
+    
+    .admin-actions {
+        display: flex;
+        gap: 15px;
+    }
+    
+    .admin-button {
+        padding: 10px 15px;
+        border-radius: 8px;
+        background-color: var(--background-tertiary);
+        color: var(--primary-text);
+        border: 1px solid var(--border-color);
+        cursor: pointer;
+        transition: all 0.3s ease;
+        display: flex;
+        align-items: center;
+        gap: 8px;
+    }
+    
+    .admin-button:hover {
+        background-color: var(--background-secondary);
+        transform: translateY(-2px);
+    }
+    
+    .admin-button.primary {
+        background-color: var(--primary-color);
+        color: white;
+        border: none;
+    }
+    
+    .admin-button.primary:hover {
+        background-color: #d43a50;
+    }
+    
+    .orders-table {
+        width: 100%;
+        border-collapse: collapse;
+        margin-top: 20px;
+        background-color: var(--card-background);
+        border-radius: 10px;
+        overflow: hidden;
+        box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+    }
+    
+    .orders-table th, .orders-table td {
+        padding: 15px;
+        text-align: left;
+        border-bottom: 1px solid var(--border-color);
+    }
+    
+    .orders-table th {
+        background-color: var(--background-secondary);
+        color: var(--primary-text);
+        font-weight: bold;
+    }
+    
+    .orders-table tr:last-child td {
+        border-bottom: none;
+    }
+    
+    .orders-table tr:hover {
+        background-color: var(--background-tertiary);
+    }
+    
+    .status-badge {
+        display: inline-block;
+        padding: 5px 10px;
+        border-radius: 20px;
+        font-size: 0.85em;
+        font-weight: bold;
+    }
+    
+    .status-badge.pending {
+        background-color: #ffc107;
+        color: #212529;
+    }
+    
+    .status-badge.paid {
+        background-color: #28a745;
+        color: white;
+    }
+    
+    .status-badge.fulfilled {
+        background-color: #007bff;
+        color: white;
+    }
+    
+    .action-buttons {
+        display: flex;
+        gap: 8px;
+    }
+    
+    .action-button {
+        padding: 6px 10px;
+        border-radius: 5px;
+        cursor: pointer;
+        font-size: 0.9em;
+        transition: all 0.2s ease;
+    }
+    
+    .action-button.view {
+        background-color: #6c757d;
+        color: white;
+        border: none;
+    }
+    
+    .action-button.fulfill {
+        background-color: #007bff;
+        color: white;
+        border: none;
+    }
+    
+    .action-button:hover {
+        opacity: 0.9;
+        transform: translateY(-2px);
+    }
+    
+    .action-button:disabled {
+        background-color: #ccc;
+        cursor: not-allowed;
+        transform: none;
+    }
+    
+    .modal {
+        display: none;
+        position: fixed;
+        z-index: 1000;
+        left: 0;
+        top: 0;
+        width: 100%;
+        height: 100%;
+        background-color: rgba(0,0,0,0.7);
+        overflow: auto;
+    }
+    
+    .modal-content {
+        position: relative;
+        background-color: var(--card-background);
+        margin: 10% auto;
+        padding: 25px;
+        border-radius: 15px;
+        width: 80%;
+        max-width: 600px;
+        box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+        transform: scale(0.7);
+        opacity: 0;
+        transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+    }
+    
+    .modal-content.show-modal {
+        transform: scale(1);
+        opacity: 1;
+    }
+    
+    .close-button {
+        position: absolute;
+        top: 15px;
+        right: 20px;
+        font-size: 24px;
+        font-weight: bold;
+        color: var(--secondary-text);
+        cursor: pointer;
+        transition: color 0.3s;
+    }
+    
+    .close-button:hover {
+        color: var(--primary-text);
+    }
+    
+    .order-details {
+        margin-top: 20px;
+    }
+    
+    .order-info {
+        display: flex;
+        flex-direction: column;
+        gap: 10px;
+        margin-bottom: 20px;
+    }
+    
+    .order-info-row {
+        display: flex;
+        justify-content: space-between;
+    }
+    
+    .order-items {
+        margin-top: 20px;
+        border-top: 1px solid var(--border-color);
+        padding-top: 15px;
+    }
+    
+    .order-item {
+        display: flex;
+        justify-content: space-between;
+        padding: 8px 0;
+        border-bottom: 1px dashed var(--border-color);
+    }
+    
+    .order-total {
+        margin-top: 15px;
+        font-weight: bold;
+        text-align: right;
+        font-size: 1.1em;
+    }
+    
+    .fulfill-form {
+        margin-top: 20px;
+        padding-top: 20px;
+        border-top: 1px solid var(--border-color);
+    }
+    
+    .form-group {
+        margin-bottom: 15px;
+    }
+    
+    .form-group label {
+        display: block;
+        margin-bottom: 8px;
+        font-weight: bold;
+    }
+    
+    .form-group textarea {
+        width: 100%;
+        padding: 10px;
+        border-radius: 5px;
+        border: 1px solid var(--border-color);
+        background-color: var(--background-tertiary);
+        color: var(--primary-text);
+        resize: vertical;
+        min-height: 80px;
+    }
+    
+    .form-actions {
+        display: flex;
+        justify-content: flex-end;
+        gap: 15px;
+        margin-top: 20px;
+    }
+    
+    .no-orders {
+        text-align: center;
+        padding: 40px;
+        color: var(--secondary-text);
+        font-size: 1.2em;
+    }
+    
+    .no-orders i {
+        font-size: 3em;
+        margin-bottom: 15px;
+        color: var(--border-color);
+    }
+</style>
+</head>
+<body>
+
+<header>
+  <div class="header-left">
+    <img src="logoverda.jpg" alt="Verda4Store Logo" id="headerLogo">
+    <span class="header-title">Verda4Store</span>
+  </div>
+  <div class="header-right">
+    <select id="langSelector" aria-label="Pilih Bahasa">
+      <option value="id">Bahasa Indonesia</option>
+      <option value="en">English</option>
+    </select>
+    <button id="darkModeToggle" aria-label="Toggle Dark Mode">🌙</button>
+    <a href="index.html" class="header-link"><i class="fas fa-home"></i> Kembali ke Beranda</a>
+  </div>
+</header>
+
+<div class="admin-container">
+    <div class="admin-header">
+        <div class="admin-title">
+            <i class="fas fa-user-shield"></i>
+            <h1>Admin Panel - Kelola Pesanan</h1>
+        </div>
+        <div class="admin-actions">
+            <button id="refreshOrdersBtn" class="admin-button"><i class="fas fa-sync-alt"></i> Refresh</button>
+            <button id="exportOrdersBtn" class="admin-button"><i class="fas fa-file-export"></i> Export</button>
+        </div>
+    </div>
+    
+    <div id="ordersTableContainer">
+        <table class="orders-table">
+            <thead>
+                <tr>
+                    <th>Invoice ID</th>
+                    <th>Tanggal</th>
+                    <th>Nama Akun</th>
+                    <th>Produk</th>
+                    <th>Total</th>
+                    <th>Status</th>
+                    <th>Aksi</th>
+                </tr>
+            </thead>
+            <tbody id="ordersTableBody">
+                <!-- Orders will be loaded here -->
+            </tbody>
+        </table>
+    </div>
+</div>
+
+<!-- Order Details Modal -->
+<div id="orderModal" class="modal">
+    <div class="modal-content">
+        <span class="close-button">&times;</span>
+        <h2>Detail Pesanan</h2>
+        <div id="orderDetails" class="order-details">
+            <!-- Order details will be loaded here -->
+        </div>
+    </div>
+</div>
+
+<!-- Fulfill Order Modal -->
+<div id="fulfillModal" class="modal">
+    <div class="modal-content">
+        <span class="close-button">&times;</span>
+        <h2>Konfirmasi Pengiriman Pesanan</h2>
+        <div id="fulfillDetails" class="order-details">
+            <!-- Order details will be loaded here -->
+        </div>
+        <div class="fulfill-form">
+            <div class="form-group">
+                <label for="fulfillmentNotes">Catatan Pengiriman (opsional):</label>
+                <textarea id="fulfillmentNotes" placeholder="Masukkan catatan pengiriman jika ada..."></textarea>
+            </div>
+            <div class="form-actions">
+                <button id="cancelFulfillBtn" class="admin-button">Batal</button>
+                <button id="confirmFulfillBtn" class="admin-button primary">Konfirmasi Pengiriman</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<footer class="footer-section">
+  <div class="footer-container">
+    <div class="footer-about">
+      <img src="logoverda.jpg" alt="Verda4Store Logo" class="footer-logo">
+      <p>Top up game murah, cepat, dan terpercaya. Proses instan 24/7 dengan pembayaran lengkap.</p>
+      <div class="footer-socials">
+        <a href="https://www.instagram.com/verda4garden?igsh=YXQwNnlicTZsdHpl" target="_blank" aria-label="Instagram"><i class="fab fa-instagram"></i></a>
+        <a href="https://www.tiktok.com/@fahril29124?_t=ZS-8xm7Utsr1sO&_r=1" target="_blank" aria-label="TikTok"><i class="fab fa-tiktok"></i></a>
+        <a href="mailto:verda4garden@gmail.com" aria-label="Email"><i class="fas fa-envelope"></i></a>
+      </div>
+    </div>
+    <div class="footer-links">
+      <h4>Peta Situs</h4>
+      <ul>
+        <li><a href="home.html">Beranda</a></li>
+        <li><a href="login.html">Masuk</a></li>
+        <li><a href="register.html">Daftar</a></li>
+        <li><a href="cek-transaksi.html">Cek Transaksi</a></li>
+      </ul>
+    </div>
+    <div class="footer-links">
+      <h4>Dukungan</h4>
+      <ul>
+        <li><a href="hubungi-kami.html">Hubungi Kami</a></li>
+      </ul>
+    </div>
+    <div class="footer-links">
+      <h4>Legalitas</h4>
+      <ul>
+        <li><a href="kebijakan-privasi.html">Kebijakan Privasi</a></li>
+        <li><a href="syarat-ketentuan.html">Syarat & Ketentuan</a></li>
+      </ul>
+    </div>
+  </div>
+  <div class="footer-bottom">
+    &copy; <span id="currentYear"></span> Verda4Store. All rights reserved.
+  </div>
+</footer>
+
+<script src="js/telegram-bot.js"></script>
+<script>
+document.addEventListener('DOMContentLoaded', () => {
+    const ordersTableBody = document.getElementById('ordersTableBody');
+    const refreshOrdersBtn = document.getElementById('refreshOrdersBtn');
+    const exportOrdersBtn = document.getElementById('exportOrdersBtn');
+    const orderModal = document.getElementById('orderModal');
+    const fulfillModal = document.getElementById('fulfillModal');
+    const orderDetails = document.getElementById('orderDetails');
+    const fulfillDetails = document.getElementById('fulfillDetails');
+    const fulfillmentNotes = document.getElementById('fulfillmentNotes');
+    const confirmFulfillBtn = document.getElementById('confirmFulfillBtn');
+    const cancelFulfillBtn = document.getElementById('cancelFulfillBtn');
+    const currentYearSpan = document.getElementById('currentYear');
+    
+    if (currentYearSpan) {
+        currentYearSpan.textContent = new Date().getFullYear();
+    }
+    
+    // Close modals when clicking on close button or outside the modal
+    document.querySelectorAll('.close-button').forEach(button => {
+        button.addEventListener('click', () => {
+            orderModal.style.display = 'none';
+            fulfillModal.style.display = 'none';
+        });
+    });
+    
+    window.addEventListener('click', (event) => {
+        if (event.target === orderModal) {
+            orderModal.style.display = 'none';
+        }
+        if (event.target === fulfillModal) {
+            fulfillModal.style.display = 'none';
+        }
+    });
+    
+    // Cancel fulfill button
+    cancelFulfillBtn.addEventListener('click', () => {
+        fulfillModal.style.display = 'none';
+    });
+    
+    // Load orders from localStorage
+    function loadOrders() {
+        ordersTableBody.innerHTML = '';
+        
+        // Get all keys from localStorage
+        const keys = Object.keys(localStorage);
+        
+        // Filter only invoice IDs (starting with PUBG-, MLBB-, or FF-)
+        const invoiceKeys = keys.filter(key => 
+            key.startsWith('PUBG-') || 
+            key.startsWith('MLBB-') || 
+            key.startsWith('FF-')
+        );
+        
+        if (invoiceKeys.length === 0) {
+            ordersTableBody.innerHTML = `
+                <tr>
+                    <td colspan="7">
+                        <div class="no-orders">
+                            <i class="fas fa-inbox"></i>
+                            <p>Belum ada pesanan yang ditemukan.</p>
+                        </div>
+                    </td>
+                </tr>
+            `;
+            return;
+        }
+        
+        // Sort by date (newest first)
+        invoiceKeys.sort((a, b) => {
+            const orderA = JSON.parse(localStorage.getItem(a));
+            const orderB = JSON.parse(localStorage.getItem(b));
+            return new Date(orderB.date) - new Date(orderA.date);
+        });
+        
+        // Create table rows for each order
+        invoiceKeys.forEach(key => {
+            const order = JSON.parse(localStorage.getItem(key));
+            
+            // Determine status
+            let status, statusClass;
+            if (order.status === 'fulfilled') {
+                status = 'Terkirim';
+                statusClass = 'fulfilled';
+            } else if (order.status === 'paid' || order.paymentDate) {
+                status = 'Dibayar';
+                statusClass = 'paid';
+            } else {
+                status = 'Menunggu';
+                statusClass = 'pending';
+            }
+            
+            // Get product name
+            const productName = order.cart && order.cart.length > 0 
+                ? order.cart[0].name 
+                : 'Tidak ada produk';
+            
+            // Create table row
+            const row = document.createElement('tr');
+            row.innerHTML = `
+                <td>${order.invoiceId}</td>
+                <td>${order.date}</td>
+                <td>${order.buyerName}</td>
+                <td>${productName}</td>
+                <td>${formatPrice(order.total)}</td>
+                <td><span class="status-badge ${statusClass}">${status}</span></td>
+                <td class="action-buttons">
+                    <button class="action-button view" data-id="${order.invoiceId}">
+                        <i class="fas fa-eye"></i> Lihat
+                    </button>
+                    <button class="action-button fulfill" data-id="${order.invoiceId}" ${order.status === 'fulfilled' ? 'disabled' : ''}>
+                        <i class="fas fa-check"></i> Kirim
+                    </button>
+                </td>
+            `;
+            
+            ordersTableBody.appendChild(row);
+        });
+        
+        // Add event listeners to view buttons
+        document.querySelectorAll('.action-button.view').forEach(button => {
+            button.addEventListener('click', () => {
+                const invoiceId = button.getAttribute('data-id');
+                showOrderDetails(invoiceId);
+            });
+        });
+        
+        // Add event listeners to fulfill buttons
+        document.querySelectorAll('.action-button.fulfill').forEach(button => {
+            button.addEventListener('click', () => {
+                const invoiceId = button.getAttribute('data-id');
+                showFulfillModal(invoiceId);
+            });
+        });
+    }
+    
+    // Format price
+    function formatPrice(num) {
+        return 'Rp ' + num.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ".");
+    }
+    
+    // Show order details modal
+    function showOrderDetails(invoiceId) {
+        const order = JSON.parse(localStorage.getItem(invoiceId));
+        
+        if (!order) {
+            alert('Data pesanan tidak ditemukan!');
+            return;
+        }
+        
+        // Determine status
+        let status, statusClass;
+        if (order.status === 'fulfilled') {
+            status = 'Terkirim';
+            statusClass = 'fulfilled';
+        } else if (order.status === 'paid' || order.paymentDate) {
+            status = 'Dibayar';
+            statusClass = 'paid';
+        } else {
+            status = 'Menunggu Pembayaran';
+            statusClass = 'pending';
+        }
+        
+        // Format order items
+        let itemsHtml = '';
+        order.cart.forEach(item => {
+            itemsHtml += `
+                <div class="order-item">
+                    <span>${item.name} (x${item.qty})</span>
+                    <span>${formatPrice(item.price * item.qty)}</span>
+                </div>
+            `;
+        });
+        
+        // Create order details HTML
+        let detailsHtml = `
+            <div class="order-info">
+                <div class="order-info-row">
+                    <strong>Invoice ID:</strong>
+                    <span>${order.invoiceId}</span>
+                </div>
+                <div class="order-info-row">
+                    <strong>Status:</strong>
+                    <span class="status-badge ${statusClass}">${status}</span>
+                </div>
+                <div class="order-info-row">
+                    <strong>Tanggal Pesanan:</strong>
+                    <span>${order.date}</span>
+                </div>
+                <div class="order-info-row">
+                    <strong>Nama Akun:</strong>
+                    <span>${order.buyerName}</span>
+                </div>
+                <div class="order-info-row">
+                    <strong>Metode Pembayaran:</strong>
+                    <span>${order.paymentMethod}</span>
+                </div>
+                ${order.paymentDate ? `
+                <div class="order-info-row">
+                    <strong>Tanggal Pembayaran:</strong>
+                    <span>${order.paymentDate}</span>
+                </div>
+                ` : ''}
+                ${order.status === 'fulfilled' ? `
+                <div class="order-info-row">
+                    <strong>Tanggal Pengiriman:</strong>
+                    <span>${order.fulfillmentDate}</span>
+                </div>
+                ${order.fulfillmentNotes ? `
+                <div class="order-info-row">
+                    <strong>Catatan Pengiriman:</strong>
+                    <span>${order.fulfillmentNotes}</span>
+                </div>
+                ` : ''}
+                ` : ''}
+            </div>
+            
+            <div class="order-items">
+                <h3>Item yang Dibeli:</h3>
+                ${itemsHtml}
+            </div>
+            
+            <div class="order-total">
+                <div>Subtotal: ${formatPrice(order.subtotal)}</div>
+                ${order.discount > 0 ? `<div>Diskon: -${formatPrice(order.discount)}</div>` : ''}
+                <div>Total: ${formatPrice(order.total)}</div>
+            </div>
+        `;
+        
+        orderDetails.innerHTML = detailsHtml;
+        
+        // Show modal with animation
+        orderModal.style.display = 'block';
+        setTimeout(() => {
+            orderModal.querySelector('.modal-content').classList.add('show-modal');
+        }, 10);
+    }
+    
+    // Show fulfill order modal
+    function showFulfillModal(invoiceId) {
+        const order = JSON.parse(localStorage.getItem(invoiceId));
+        
+        if (!order) {
+            alert('Data pesanan tidak ditemukan!');
+            return;
+        }
+        
+        // Format order summary
+        let summaryHtml = `
+            <div class="order-info">
+                <div class="order-info-row">
+                    <strong>Invoice ID:</strong>
+                    <span>${order.invoiceId}</span>
+                </div>
+                <div class="order-info-row">
+                    <strong>Nama Akun:</strong>
+                    <span>${order.buyerName}</span>
+                </div>
+                <div class="order-info-row">
+                    <strong>Produk:</strong>
+                    <span>${order.cart[0].name}</span>
+                </div>
+                <div class="order-info-row">
+                    <strong>Total:</strong>
+                    <span>${formatPrice(order.total)}</span>
+                </div>
+            </div>
+        `;
+        
+        fulfillDetails.innerHTML = summaryHtml;
+        fulfillmentNotes.value = '';
+        
+        // Store invoice ID for the confirm button
+        confirmFulfillBtn.setAttribute('data-id', invoiceId);
+        
+        // Show modal with animation
+        fulfillModal.style.display = 'block';
+        setTimeout(() => {
+            fulfillModal.querySelector('.modal-content').classList.add('show-modal');
+        }, 10);
+    }
+    
+    // Confirm fulfill order
+    confirmFulfillBtn.addEventListener('click', async () => {
+        const invoiceId = confirmFulfillBtn.getAttribute('data-id');
+        const notes = fulfillmentNotes.value.trim();
+        
+        // Show loading state
+        confirmFulfillBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Memproses...';
+        confirmFulfillBtn.disabled = true;
+        
+        try {
+            // Mark order as fulfilled
+            const success = await markOrderAsFulfilled(invoiceId, notes);
+            
+            if (success) {
+                // Close modal and refresh orders
+                fulfillModal.style.display = 'none';
+                loadOrders();
+                
+                // Show success message
+                alert('Pesanan berhasil ditandai sebagai terkirim!');
+            } else {
+                alert('Gagal menandai pesanan sebagai terkirim. Silakan coba lagi.');
+            }
+        } catch (error) {
+            console.error('Error marking order as fulfilled:', error);
+            alert('Terjadi kesalahan: ' + error.message);
+        } finally {
+            // Reset button state
+            confirmFulfillBtn.innerHTML = 'Konfirmasi Pengiriman';
+            confirmFulfillBtn.disabled = false;
+        }
+    });
+    
+    // Refresh orders button
+    refreshOrdersBtn.addEventListener('click', () => {
+        loadOrders();
+    });
+    
+    // Export orders button
+    exportOrdersBtn.addEventListener('click', () => {
+        exportOrders();
+    });
+    
+    // Export orders to CSV
+    function exportOrders() {
+        // Get all keys from localStorage
+        const keys = Object.keys(localStorage);
+        
+        // Filter only invoice IDs
+        const invoiceKeys = keys.filter(key => 
+            key.startsWith('PUBG-') || 
+            key.startsWith('MLBB-') || 
+            key.startsWith('FF-')
+        );
+        
+        if (invoiceKeys.length === 0) {
+            alert('Tidak ada data pesanan untuk diekspor.');
+            return;
+        }
+        
+        // Create CSV header
+        let csv = 'Invoice ID,Tanggal,Nama Akun,Produk,Total,Status,Tanggal Pembayaran,Tanggal Pengiriman\n';
+        
+        // Add rows for each order
+        invoiceKeys.forEach(key => {
+            const order = JSON.parse(localStorage.getItem(key));
+            
+            // Determine status
+            let status;
+            if (order.status === 'fulfilled') {
+                status = 'Terkirim';
+            } else if (order.status === 'paid' || order.paymentDate) {
+                status = 'Dibayar';
+            } else {
+                status = 'Menunggu';
+            }
+            
+            // Get product name
+            const productName = order.cart && order.cart.length > 0 
+                ? order.cart[0].name.replace(/,/g, ' ') // Remove commas to avoid CSV issues
+                : 'Tidak ada produk';
+            
+            // Format row
+            csv += `"${order.invoiceId}","${order.date}","${order.buyerName.replace(/,/g, ' ')}","${productName}","${order.total}","${status}","${order.paymentDate || ''}","${order.fulfillmentDate || ''}"\n`;
+        });
+        
+        // Create download link
+        const blob = new Blob([csv], { type: 'text/csv;charset=utf-8;' });
+        const url = URL.createObjectURL(blob);
+        const link = document.createElement('a');
+        link.setAttribute('href', url);
+        link.setAttribute('download', `orders_export_${new Date().toISOString().slice(0, 10)}.csv`);
+        link.style.visibility = 'hidden';
+        document.body.appendChild(link);
+        link.click();
+        document.body.removeChild(link);
+    }
+    
+    // Initialize
+    loadOrders();
+    
+    /**
+     * Mark an order as fulfilled and send notification to Telegram
+     * @param {string} invoiceId - The invoice ID
+     * @param {string} notes - Optional fulfillment notes
+     * @returns {Promise<boolean>} - Whether the operation was successful
+     */
+    async function markOrderAsFulfilled(invoiceId, notes) {
+        try {
+            // Get order data from localStorage
+            const orderData = localStorage.getItem(invoiceId);
+            if (!orderData) {
+                throw new Error('Order not found');
+            }
+            
+            const order = JSON.parse(orderData);
+            
+            // Check if order is already fulfilled
+            if (order.status === 'fulfilled') {
+                throw new Error('Order is already fulfilled');
+            }
+            
+            // Check if order is paid
+            if (order.status !== 'paid' && !order.paymentDate) {
+                throw new Error('Order is not paid yet');
+            }
+            
+            // Update order status
+            order.status = 'fulfilled';
+            order.fulfillmentDate = new Date().toLocaleString('id-ID', {
+                year: 'numeric',
+                month: 'long',
+                day: 'numeric',
+                hour: '2-digit',
+                minute: '2-digit'
+            });
+            
+            if (notes) {
+                order.fulfillmentNotes = notes;
+            }
+            
+            // Save updated order to localStorage
+            localStorage.setItem(invoiceId, JSON.stringify(order));
+            
+            // Send fulfillment notification to Telegram
+            const fulfillmentData = {
+                invoiceId: order.invoiceId,
+                buyerName: order.buyerName,
+                paymentMethod: order.paymentMethod,
+                amount: order.total,
+                fulfillmentDate: order.fulfillmentDate,
+                notes: notes || ''
+            };
+            
+            // Send notification to Telegram
+            await sendFulfillmentToTelegram(fulfillmentData);
+            
+            return true;
+        } catch (error) {
+            console.error('Error marking order as fulfilled:', error);
+            throw error;
+        }
+    }
+});
+
+// Telegram Bot Configuration - Same as in telegram-bot.js for consistency
+const TELEGRAM_CONFIG = {
+    botToken: "7985620779:AAE7RJ2twsG6r4SgOXQsMFKH5zsOnKwIPMQ", // Bot token
+    chatId: "-4696626660"      // Group Chat ID
+};
+
+/**
+ * Send fulfillment notification to Telegram bot
+ * @param {Object} fulfillmentData - Fulfillment data
+ * @returns {Promise<boolean>} - Whether the message was sent successfully
+ */
+async function sendFulfillmentToTelegram(fulfillmentData) {
+    try {
+        // Format message for Telegram
+        const message = formatFulfillmentMessage(fulfillmentData);
+        
+        // Determine if we're in a local environment or deployed
+        const isLocal = window.location.hostname === 'localhost' ||
+                        window.location.hostname === '127.0.0.1' ||
+                        window.location.protocol === 'file:';
+        
+        let response;
+        
+        if (isLocal) {
+            // If running locally, call Telegram API directly
+            console.log('Running in local environment, calling Telegram API directly');
+            response = await fetch(`https://api.telegram.org/bot${TELEGRAM_CONFIG.botToken}/sendMessage`, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({
+                    chat_id: TELEGRAM_CONFIG.chatId,
+                    text: message,
+                    parse_mode: 'HTML'
+                })
+            });
+            
+            const data = await response.json();
+            return {
+                success: data.ok,
+                error: data.ok ? null : data.description
+            };
+        } else {
+            // If deployed, use the serverless function
+            console.log('Running in deployed environment, using serverless function');
+            response = await fetch('/api/telegram', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({
+                    message: message,
+                    chatId: TELEGRAM_CONFIG.chatId,
+                    botToken: TELEGRAM_CONFIG.botToken // Pass the bot token to the serverless function
+                })
+            });
+        }
+        
+        let result;
+        
+        // If we're in a local environment, we've already processed the response
+        if (isLocal) {
+            result = response;
+        } else {
+            // Otherwise, parse the response from the serverless function
+            try {
+                result = await response.json();
+            } catch (parseError) {
+                console.error('Error parsing response:', parseError);
+                console.error('Response status:', response.status);
+                console.error('Response text:', await response.text());
+                
+                return false;
+            }
+        }
+        
+        if (!result.success) {
+            console.error('Failed to send fulfillment notification to Telegram:', result.error);
+            console.error('Error details:', result.details || 'No details available');
+            
+            // Display error in console for debugging
+            console.group('Telegram Error Details');
+            console.error('Status:', response.status);
+            console.error('Error:', result.error);
+            console.error('Details:', result.details || 'None');
+            console.groupEnd();
+            
+            return false;
+        }
+        
+        console.log('Fulfillment notification sent to Telegram successfully');
+        return true;
+    } catch (error) {
+        console.error('Error sending fulfillment notification to Telegram:', error);
+        return false;
+    }
+}
+
+/**
+ * Format fulfillment data for Telegram message
+ * @param {Object} fulfillmentData - Fulfillment data
+ * @returns {String} - Formatted message
+ */
+function formatFulfillmentMessage(fulfillmentData) {
+    // Get game name from invoice prefix
+    let gameName = "Game";
+    if (fulfillmentData.invoiceId.startsWith("PUBG-")) {
+        gameName = "PUBG Mobile";
+    } else if (fulfillmentData.invoiceId.startsWith("MLBB-")) {
+        gameName = "Mobile Legends";
+    } else if (fulfillmentData.invoiceId.startsWith("FF-")) {
+        gameName = "Free Fire";
+    }
+    
+    // Format message with HTML formatting
+    let message = `<b>✅ Pesanan Terkirim: ${gameName}</b>\n\n`;
+    message += `<b>📋 Invoice ID:</b> ${fulfillmentData.invoiceId}\n`;
+    message += `<b>👤 Player ID:</b> ${fulfillmentData.buyerName}\n`;
+    message += `<b>💰 Total:</b> Rp ${fulfillmentData.amount.toLocaleString('id-ID')}\n`;
+    message += `<b>🕒 Tanggal Pengiriman:</b> ${fulfillmentData.fulfillmentDate}\n`;
+    
+    if (fulfillmentData.notes) {
+        message += `\n<b>📝 Catatan:</b> ${fulfillmentData.notes}\n`;
+    }
+    
+    return message;
+}
+</script>
+</body>
+</html>

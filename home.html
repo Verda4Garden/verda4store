@@ -1,0 +1,1533 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Verda4Store – Beli Kebutuhan Game Anda</title>
+<link rel="icon" href="logoverda.jpg" type="image/jpeg">
+<meta name="description" content="Top up game murah, cepat, dan terpercaya. Proses instan 24/7 dengan pembayaran lengkap.">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+<style>
+    :root {
+        --primary-color: #3b82f6;
+        --primary-dark: #2563eb;
+        --primary-light: #60a5fa;
+        --dark-bg: #ffffff;
+        --card-bg: #ffffff;
+        --text-color: #333333;
+        --secondary-text: #6b7280;
+        --border-color: #e5e7eb;
+        --hover-color: #f3f4f6;
+        --accent-color: #3b82f6;
+        --bee-color: #f59e0b;
+        --bee-stripe: #000000;
+    }
+    
+    * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+    }
+    
+    body {
+        background-color: var(--dark-bg);
+        color: var(--text-color);
+        font-family: 'Inter', sans-serif;
+        line-height: 1.5;
+    }
+    
+    /* Header styling */
+    header {
+        background-color: var(--card-bg);
+        padding: 12px 16px;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        border-bottom: 1px solid var(--border-color);
+    }
+    
+    .menu-button {
+        background: none;
+        border: none;
+        font-size: 1.5rem;
+        color: var(--text-color);
+        cursor: pointer;
+        padding: 0;
+    }
+    
+    .logo {
+        font-size: 1.5rem;
+        font-weight: 700;
+        color: var(--text-color);
+        text-decoration: none;
+    }
+    
+    .logo span {
+        color: var(--primary-color);
+    }
+    
+    .header-actions {
+        display: flex;
+        align-items: center;
+        gap: 16px;
+    }
+    
+    .search-button, .lang-button {
+        background: none;
+        border: none;
+        font-size: 1.2rem;
+        color: var(--text-color);
+        cursor: pointer;
+        padding: 8px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        position: relative;
+    }
+    
+    /* Hero/Banner section */
+    .hero-banner {
+        width: 100%;
+        height: 250px;
+        background-color: #f3f4f6;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        margin-bottom: 20px;
+        position: relative;
+        overflow: hidden;
+        border-radius: 0 0 20px 20px;
+        box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+    }
+    
+    .hero-banner img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+        transition: transform 0.8s ease;
+    }
+    
+    .hero-banner:hover img {
+        transform: scale(1.05);
+    }
+    
+    .hero-overlay {
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background: linear-gradient(to bottom, rgba(0,0,0,0.2), rgba(0,0,0,0.6));
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        color: white;
+        text-align: center;
+        padding: 0 20px;
+    }
+    
+    .hero-title {
+        font-size: 2.5rem;
+        font-weight: 700;
+        margin-bottom: 15px;
+        text-shadow: 2px 2px 4px rgba(0,0,0,0.5);
+        animation: fadeInDown 1s ease;
+    }
+    
+    .hero-subtitle {
+        font-size: 1.2rem;
+        max-width: 600px;
+        margin-bottom: 15px;
+        text-shadow: 1px 1px 3px rgba(0,0,0,0.5);
+        animation: fadeInUp 1s ease;
+    }
+    
+    .countdown-container {
+        margin-bottom: 20px;
+        animation: fadeInUp 1.2s ease;
+    }
+    
+    .countdown-text {
+        font-size: 0.9rem;
+        margin-bottom: 5px;
+        color: #ffcc00;
+        text-shadow: 1px 1px 3px rgba(0,0,0,0.5);
+    }
+    
+    .countdown {
+        display: flex;
+        justify-content: center;
+        gap: 15px;
+    }
+    
+    .countdown-item {
+        background: rgba(0, 0, 0, 0.5);
+        border-radius: 8px;
+        padding: 8px 12px;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        min-width: 60px;
+    }
+    
+    .countdown-item span:first-child {
+        font-size: 1.5rem;
+        font-weight: bold;
+        color: #ffcc00;
+    }
+    
+    .countdown-label {
+        font-size: 0.7rem;
+        color: #ffffff;
+        opacity: 0.8;
+    }
+    
+    .hero-button {
+        background: linear-gradient(45deg, #ff6b6b, #3b82f6);
+        color: white;
+        border: none;
+        padding: 12px 25px;
+        border-radius: 30px;
+        font-size: 1.1rem;
+        font-weight: 600;
+        cursor: pointer;
+        transition: all 0.3s ease;
+        text-decoration: none;
+        display: inline-block;
+        box-shadow: 0 4px 15px rgba(59, 130, 246, 0.4);
+        animation: pulse 2s infinite;
+        position: relative;
+        overflow: hidden;
+        z-index: 1;
+    }
+    
+    .hero-button:before {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: -100%;
+        width: 100%;
+        height: 100%;
+        background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+        transition: 0.5s;
+        z-index: -1;
+    }
+    
+    .hero-button:hover:before {
+        left: 100%;
+    }
+    
+    .hero-button:hover {
+        background: linear-gradient(45deg, #3b82f6, #ff6b6b);
+        transform: translateY(-3px) scale(1.05);
+        box-shadow: 0 6px 20px rgba(59, 130, 246, 0.6);
+    }
+    
+    @keyframes pulse {
+        0% {
+            box-shadow: 0 0 0 0 rgba(255, 107, 107, 0.7);
+        }
+        70% {
+            box-shadow: 0 0 0 10px rgba(255, 107, 107, 0);
+        }
+        100% {
+            box-shadow: 0 0 0 0 rgba(255, 107, 107, 0);
+        }
+    }
+    
+    .sparkle {
+        position: absolute;
+        background: white;
+        border-radius: 50%;
+        animation: sparkleAnimation 2s infinite;
+        opacity: 0;
+    }
+    
+    @keyframes sparkleAnimation {
+        0% {
+            opacity: 0;
+            transform: scale(0);
+        }
+        50% {
+            opacity: 1;
+            transform: scale(1);
+        }
+        100% {
+            opacity: 0;
+            transform: scale(0);
+        }
+    }
+    
+    @keyframes fadeInDown {
+        from {
+            opacity: 0;
+            transform: translateY(-20px);
+        }
+        to {
+            opacity: 1;
+            transform: translateY(0);
+        }
+    }
+    
+    @keyframes fadeInUp {
+        from {
+            opacity: 0;
+            transform: translateY(20px);
+        }
+        to {
+            opacity: 1;
+            transform: translateY(0);
+        }
+    }
+    
+    @keyframes fadeIn {
+        from {
+            opacity: 0;
+        }
+        to {
+            opacity: 1;
+        }
+    }
+    
+    /* Category Tabs */
+    .category-tabs {
+        display: flex;
+        overflow-x: auto;
+        padding: 0 16px;
+        margin-bottom: 20px;
+        scrollbar-width: none;
+        -ms-overflow-style: none;
+    }
+    
+    .category-tabs::-webkit-scrollbar {
+        display: none;
+    }
+    
+    .category-tab {
+        background-color: #f3f4f6;
+        border: none;
+        border-radius: 20px;
+        padding: 8px 20px;
+        margin-right: 10px;
+        white-space: nowrap;
+        cursor: pointer;
+        font-weight: 500;
+    }
+    
+    .category-tab.active {
+        background-color: var(--primary-color);
+        color: white;
+    }
+    
+    /* Product Cards */
+    .product-grid {
+        display: grid;
+        grid-template-columns: repeat(3, 1fr);
+        gap: 16px;
+        padding: 0 16px;
+        margin-bottom: 30px;
+    }
+    
+    .product-card {
+        background-color: var(--card-bg);
+        border-radius: 12px;
+        overflow: hidden;
+        box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+        transition: transform 0.3s ease, box-shadow 0.3s ease;
+        position: relative;
+    }
+    
+    .product-badge {
+        position: absolute;
+        top: 10px;
+        right: 10px;
+        background: linear-gradient(45deg, #ff6b6b, #ff8e53);
+        color: white;
+        padding: 5px 10px;
+        border-radius: 20px;
+        font-size: 0.7rem;
+        font-weight: bold;
+        box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+        z-index: 2;
+        transform: rotate(5deg);
+        animation: badgePulse 2s infinite;
+    }
+    
+    @keyframes badgePulse {
+        0% {
+            transform: rotate(5deg) scale(1);
+            box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+        }
+        50% {
+            transform: rotate(5deg) scale(1.1);
+            box-shadow: 0 5px 15px rgba(0,0,0,0.3);
+        }
+        100% {
+            transform: rotate(5deg) scale(1);
+            box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+        }
+    }
+    
+    @keyframes bounce {
+        0%, 100% {
+            transform: translateY(-5px);
+        }
+        50% {
+            transform: translateY(-8px);
+        }
+    }
+    
+    .product-card:hover {
+        animation: bounce 0.8s ease infinite;
+        box-shadow: 0 15px 30px rgba(0, 0, 0, 0.15);
+    }
+    
+    .product-image {
+        width: 100%;
+        height: 150px;
+        background-color: #f3f4f6;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        overflow: hidden;
+        position: relative;
+    }
+    
+    .product-image img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+        transition: transform 0.3s ease;
+    }
+    
+    .product-card:hover .product-image img {
+        transform: scale(1.1);
+        transition: transform 0.5s ease;
+    }
+    
+    @keyframes shine {
+        0% {
+            background-position: -100% 0;
+        }
+        100% {
+            background-position: 200% 0;
+        }
+    }
+    
+    .product-card:hover .product-image::before {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background: linear-gradient(
+            to right,
+            rgba(255, 255, 255, 0) 0%,
+            rgba(255, 255, 255, 0.3) 50%,
+            rgba(255, 255, 255, 0) 100%
+        );
+        background-size: 200% 100%;
+        animation: shine 1.5s infinite;
+        z-index: 1;
+    }
+    
+    .product-content {
+        padding: 12px;
+    }
+    
+    .product-title {
+        font-weight: 600;
+        font-size: 1rem;
+        margin-bottom: 4px;
+    }
+    
+    .product-description {
+        font-size: 0.8rem;
+        color: var(--secondary-text);
+    }
+    
+    .game-card-button {
+        display: block;
+        background: linear-gradient(45deg, var(--primary-color), #4f46e5);
+        color: white;
+        text-align: center;
+        padding: 10px 0;
+        text-decoration: none;
+        font-weight: 600;
+        border-radius: 0 0 12px 12px;
+        transition: all 0.3s ease;
+        position: relative;
+        overflow: hidden;
+        z-index: 1;
+    }
+    
+    .game-card-button:before {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: -100%;
+        width: 100%;
+        height: 100%;
+        background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+        transition: 0.5s;
+        z-index: -1;
+    }
+    
+    .game-card-button:hover:before {
+        left: 100%;
+    }
+    
+    .game-card-button:hover {
+        background: linear-gradient(45deg, #4f46e5, var(--primary-color));
+        transform: translateY(-4px);
+        box-shadow: 0 8px 15px rgba(0, 0, 0, 0.2);
+    }
+    
+    .game-card-button:active {
+        transform: translateY(-2px);
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    }
+    
+    .game-card-button i {
+        margin-right: 5px;
+    }
+    
+    /* Footer */
+    .footer {
+        padding: 30px 16px;
+        border-top: 1px solid var(--border-color);
+    }
+    
+    .footer-title {
+        font-size: 1.5rem;
+        font-weight: 700;
+        margin-bottom: 10px;
+    }
+    
+    .footer-title span {
+        color: var(--primary-color);
+    }
+    
+    .footer-description {
+        color: var(--secondary-text);
+        margin-bottom: 20px;
+        max-width: 600px;
+    }
+    
+    .footer-sections {
+        display: grid;
+        grid-template-columns: repeat(3, 1fr);
+        gap: 30px;
+        margin-bottom: 30px;
+    }
+    
+    .footer-section-title {
+        font-weight: 600;
+        margin-bottom: 15px;
+    }
+    
+    .footer-links {
+        list-style: none;
+    }
+    
+    .footer-links li {
+        margin-bottom: 10px;
+    }
+    
+    .footer-links a {
+        color: var(--secondary-text);
+        text-decoration: none;
+    }
+    
+    .footer-links a:hover {
+        color: var(--primary-color);
+    }
+    
+    .social-links {
+        display: flex;
+        gap: 15px;
+        margin-top: 10px;
+    }
+    
+    .social-link {
+        width: 36px;
+        height: 36px;
+        border-radius: 50%;
+        background-color: #f3f4f6;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        color: var(--text-color);
+        text-decoration: none;
+        transition: all 0.3s ease;
+        position: relative;
+    }
+    
+    .sr-only {
+        position: absolute;
+        width: 1px;
+        height: 1px;
+        padding: 0;
+        margin: -1px;
+        overflow: hidden;
+        clip: rect(0, 0, 0, 0);
+        white-space: nowrap;
+        border-width: 0;
+    }
+    
+    .social-link:hover {
+        background-color: var(--primary-color);
+        color: white;
+        transform: translateY(-3px);
+        box-shadow: 0 5px 10px rgba(0, 0, 0, 0.1);
+    }
+    
+    .copyright {
+        text-align: center;
+        color: var(--secondary-text);
+        font-size: 0.9rem;
+        padding-top: 20px;
+        border-top: 1px solid var(--border-color);
+    }
+    
+    /* Search Overlay */
+    .search-overlay {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background-color: rgba(0, 0, 0, 0.8);
+        z-index: 9999;
+        display: none;
+        justify-content: center;
+        align-items: flex-start;
+        padding-top: 80px;
+        overflow-y: auto;
+    }
+    
+    .search-container {
+        width: 90%;
+        max-width: 600px;
+        background-color: var(--card-bg);
+        border-radius: 12px;
+        box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2);
+        overflow: hidden;
+    }
+    
+    .search-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding: 16px;
+        border-bottom: 1px solid var(--border-color);
+    }
+    
+    .search-header h3 {
+        margin: 0;
+        font-size: 1.2rem;
+    }
+    
+    .close-btn {
+        background: none;
+        border: none;
+        font-size: 1.5rem;
+        cursor: pointer;
+        color: var(--text-color);
+    }
+    
+    .search-form {
+        padding: 16px;
+        border-bottom: 1px solid var(--border-color);
+    }
+    
+    .search-input-container {
+        position: relative;
+        display: flex;
+        align-items: center;
+    }
+    
+    .search-icon {
+        position: absolute;
+        left: 12px;
+        color: var(--secondary-text);
+    }
+    
+    #searchInput {
+        width: 100%;
+        padding: 12px 40px;
+        border: 1px solid var(--border-color);
+        border-radius: 8px;
+        font-size: 1rem;
+        outline: none;
+    }
+    
+    #searchInput:focus {
+        border-color: var(--primary-color);
+    }
+    
+    .clear-search-btn {
+        position: absolute;
+        right: 12px;
+        background: none;
+        border: none;
+        color: var(--secondary-text);
+        cursor: pointer;
+        display: none;
+    }
+    
+    .search-results {
+        max-height: 400px;
+        overflow-y: auto;
+        padding: 16px;
+    }
+    
+    /* Sidenav */
+    .sidenav {
+        height: 100%;
+        width: 0;
+        position: fixed;
+        z-index: 1000;
+        top: 0;
+        left: 0;
+        background-color: var(--card-bg);
+        overflow-x: hidden;
+        transition: 0.3s;
+        padding-top: 60px;
+    }
+    
+    .sidenav a {
+        padding: 8px 16px;
+        text-decoration: none;
+        font-size: 1rem;
+        color: var(--text-color);
+        display: block;
+        transition: 0.3s;
+    }
+    
+    .sidenav a:hover {
+        color: var(--primary-color);
+    }
+    
+    .sidenav .closebtn {
+        position: absolute;
+        top: 0;
+        right: 25px;
+        font-size: 36px;
+        margin-left: 50px;
+    }
+    
+    /* Language dropdown */
+    .lang-dropdown {
+        position: relative;
+        display: inline-block;
+    }
+    
+    .lang-content {
+        display: none;
+        position: absolute;
+        right: 0;
+        background-color: var(--card-bg);
+        min-width: 120px;
+        box-shadow: 0 8px 16px rgba(0,0,0,0.1);
+        z-index: 1;
+        border-radius: 8px;
+    }
+    
+    .lang-content a {
+        color: var(--text-color);
+        padding: 12px 16px;
+        text-decoration: none;
+        display: block;
+    }
+    
+    .lang-content a:hover {
+        background-color: var(--hover-color);
+    }
+    
+    .show {
+        display: block;
+    }
+    
+    /* Loading Animation */
+    .loading-overlay {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background-color: #ffffff;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        z-index: 10000;
+        transition: opacity 0.5s ease;
+    }
+    
+    .bee-container {
+        position: relative;
+        width: 120px;
+        height: 120px;
+    }
+    
+    .bee {
+        position: absolute;
+        width: 60px;
+        height: 60px;
+        background-color: var(--bee-color);
+        border-radius: 50%;
+        top: 30px;
+        left: 30px;
+        animation: fly 2s infinite ease-in-out;
+    }
+    
+    .bee::before, .bee::after {
+        content: '';
+        position: absolute;
+        background-color: var(--bee-stripe);
+        height: 15px;
+        width: 100%;
+        left: 0;
+        border-radius: 15px;
+    }
+    
+    .bee::before {
+        top: 15px;
+    }
+    
+    .bee::after {
+        top: 35px;
+    }
+    
+    .wing {
+        position: absolute;
+        width: 30px;
+        height: 40px;
+        background-color: rgba(255, 255, 255, 0.8);
+        border-radius: 50%;
+        transform-origin: bottom center;
+    }
+    
+    .wing-left {
+        top: -10px;
+        left: 5px;
+        animation: flapLeft 0.2s infinite alternate;
+    }
+    
+    .wing-right {
+        top: -10px;
+        right: 5px;
+        animation: flapRight 0.2s infinite alternate;
+    }
+    
+    .stinger {
+        position: absolute;
+        width: 10px;
+        height: 10px;
+        background-color: var(--bee-stripe);
+        bottom: -5px;
+        left: 25px;
+        clip-path: polygon(50% 100%, 0 0, 100% 0);
+    }
+    
+    .eye {
+        position: absolute;
+        width: 8px;
+        height: 8px;
+        background-color: white;
+        border-radius: 50%;
+        top: 15px;
+    }
+    
+    .eye-left {
+        left: 12px;
+    }
+    
+    .eye-right {
+        right: 12px;
+    }
+    
+    .eye::after {
+        content: '';
+        position: absolute;
+        width: 4px;
+        height: 4px;
+        background-color: black;
+        border-radius: 50%;
+        top: 2px;
+        left: 2px;
+    }
+    
+    .loading-text {
+        position: absolute;
+        bottom: -30px;
+        font-size: 16px;
+        font-weight: 600;
+        color: var(--primary-color);
+        animation: pulse 1.5s infinite;
+    }
+    
+    .flower {
+        position: absolute;
+        width: 20px;
+        height: 20px;
+        border-radius: 50%;
+        background-color: #ec4899;
+        opacity: 0;
+    }
+    
+    .flower1 {
+        top: 0;
+        left: 50px;
+        animation: flowerAppear 4s infinite 0.5s;
+    }
+    
+    .flower2 {
+        top: 50px;
+        left: 0;
+        animation: flowerAppear 4s infinite 1s;
+    }
+    
+    .flower3 {
+        top: 50px;
+        right: 0;
+        animation: flowerAppear 4s infinite 1.5s;
+    }
+    
+    .flower4 {
+        bottom: 0;
+        left: 50px;
+        animation: flowerAppear 4s infinite 2s;
+    }
+    
+    .flower::after {
+        content: '';
+        position: absolute;
+        width: 10px;
+        height: 10px;
+        background-color: #fcd34d;
+        border-radius: 50%;
+        top: 5px;
+        left: 5px;
+    }
+    
+    @keyframes fly {
+        0%, 100% {
+            transform: translateY(0) rotate(0deg);
+        }
+        25% {
+            transform: translateY(-15px) rotate(-5deg);
+        }
+        50% {
+            transform: translateY(0) rotate(0deg);
+        }
+        75% {
+            transform: translateY(15px) rotate(5deg);
+        }
+    }
+    
+    @keyframes flapLeft {
+        from {
+            transform: rotate(30deg);
+        }
+        to {
+            transform: rotate(70deg);
+        }
+    }
+    
+    @keyframes flapRight {
+        from {
+            transform: rotate(-30deg);
+        }
+        to {
+            transform: rotate(-70deg);
+        }
+    }
+    
+    @keyframes pulse {
+        0%, 100% {
+            opacity: 1;
+        }
+        50% {
+            opacity: 0.5;
+        }
+    }
+    
+    @keyframes flowerAppear {
+        0%, 100% {
+            opacity: 0;
+            transform: scale(0);
+        }
+        25%, 75% {
+            opacity: 1;
+            transform: scale(1);
+        }
+    }
+    
+    @media (max-width: 768px) {
+        .footer-sections {
+            grid-template-columns: 1fr;
+            gap: 20px;
+        }
+        
+        .product-grid {
+            grid-template-columns: repeat(2, 1fr);
+        }
+    }
+    /* Toast Notification */
+    .toast-notification {
+        position: fixed;
+        bottom: 20px;
+        right: 20px;
+        background: linear-gradient(45deg, #ff6b6b, #3b82f6);
+        color: white;
+        padding: 15px 20px;
+        border-radius: 10px;
+        box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+        z-index: 9999;
+        display: flex;
+        align-items: center;
+        transform: translateX(120%);
+        transition: transform 0.5s ease;
+        max-width: 350px;
+    }
+    
+    .toast-notification.show {
+        transform: translateX(0);
+    }
+    
+    .toast-icon {
+        font-size: 24px;
+        margin-right: 15px;
+        color: #ffcc00;
+    }
+    
+    .toast-content {
+        flex: 1;
+    }
+    
+    .toast-title {
+        font-weight: bold;
+        margin-bottom: 5px;
+        font-size: 16px;
+    }
+    
+    .toast-message {
+        font-size: 14px;
+        opacity: 0.9;
+    }
+    
+    .toast-close {
+        background: none;
+        border: none;
+        color: white;
+        font-size: 20px;
+        cursor: pointer;
+        margin-left: 10px;
+        opacity: 0.7;
+        transition: opacity 0.3s;
+    }
+    
+    .toast-close:hover {
+        opacity: 1;
+    }
+</style>
+</head>
+<body>
+<!-- Toast Notification -->
+<div id="toastNotification" class="toast-notification">
+    <div class="toast-icon">
+        <i class="fas fa-gift"></i>
+    </div>
+    <div class="toast-content">
+        <div class="toast-title">Penawaran Spesial!</div>
+        <div class="toast-message">Dapatkan bonus 100 Diamonds untuk setiap pembelian hari ini! Tawaran terbatas.</div>
+    </div>
+    <button class="toast-close" onclick="closeToast()">×</button>
+</div>
+<!-- Loading Animation -->
+<div id="loadingOverlay" class="loading-overlay">
+    <div class="bee-container">
+        <div class="bee">
+            <div class="wing wing-left"></div>
+            <div class="wing wing-right"></div>
+            <div class="eye eye-left"></div>
+            <div class="eye eye-right"></div>
+            <div class="stinger"></div>
+        </div>
+        <div class="flower flower1"></div>
+        <div class="flower flower2"></div>
+        <div class="flower flower3"></div>
+        <div class="flower flower4"></div>
+        <div class="loading-text" data-translate="memuat">Memuat...</div>
+    </div>
+</div>
+<!-- Sidenav -->
+<div id="mySidenav" class="sidenav">
+    <a href="javascript:void(0)" class="closebtn" onclick="closeNav()">&times;</a>
+    <a href="home.html" class="sidenav-link active"><i class="fas fa-home"></i> Beranda</a>
+    <a href="cek-transaksi.html" class="sidenav-link"><i class="fas fa-receipt"></i> Cek Transaksi</a>
+    <a href="login.html" class="sidenav-link"><i class="fas fa-sign-in-alt"></i> Masuk</a>
+    <a href="register.html" class="sidenav-link"><i class="fas fa-user-plus"></i> Daftar</a>
+    <a href="contact.html" class="sidenav-link"><i class="fas fa-headset"></i> Hubungi Kami</a>
+    <a href="syarat-ketentuan.html" class="sidenav-link"><i class="fas fa-file-contract"></i> Syarat & Ketentuan</a>
+    <a href="kebijakan-privasi.html" class="sidenav-link"><i class="fas fa-shield-alt"></i> Kebijakan Privasi</a>
+</div>
+
+<header>
+    <button class="menu-button" onclick="openNav()" title="Buka Menu">
+        <i class="fas fa-bars"></i>
+    </button>
+    <a href="#" class="logo">Verda4<span>Store</span></a>
+    <div class="header-actions">
+        <button class="search-button" onclick="document.getElementById('searchOverlay').style.display = 'flex';" title="Cari Game">
+            <i class="fas fa-search"></i>
+        </button>
+        <div class="lang-dropdown">
+            <button class="lang-button" onclick="toggleLang()" title="Pilih Bahasa">
+                <i class="fas fa-globe"></i> <span class="flag">🇮🇩</span> <i class="fas fa-caret-down"></i>
+            </button>
+            <div id="langDropdown" class="lang-content">
+                <a href="javascript:void(0)" onclick="changeLang('id')">🇮🇩 Indonesia</a>
+                <a href="javascript:void(0)" onclick="changeLang('en')">🇬🇧 English</a>
+            </div>
+        </div>
+    </div>
+</header>
+
+<!-- Search Overlay -->
+<div id="searchOverlay" class="search-overlay">
+    <div class="search-container">
+        <div class="search-header">
+            <h3>Cari Game</h3>
+            <button id="closeSearch" class="close-btn" onclick="document.getElementById('searchOverlay').style.display = 'none';" title="Tutup Pencarian">&times;</button>
+        </div>
+        <div class="search-form">
+            <div class="search-input-container">
+                <i class="fas fa-search search-icon"></i>
+                <input type="text" id="searchInput" placeholder="Ketik nama game..." autocomplete="off">
+                <button id="clearSearch" class="clear-search-btn" title="Hapus Pencarian"><i class="fas fa-times"></i></button>
+            </div>
+        </div>
+        <div id="searchResults" class="search-results">
+            <!-- Search results will be populated here -->
+        </div>
+    </div>
+</div>
+
+<!-- Hero Banner -->
+<div class="hero-banner">
+    <img src="noFilter.webp" alt="Verda4Store Banner">
+    <div class="hero-overlay">
+        <h1 class="hero-title">Verda4Store</h1>
+        <p class="hero-subtitle">Tingkatkan pengalaman gaming Anda! Dapatkan diamonds, UC, dan Robux dengan harga spesial dan bonus eksklusif hari ini!</p>
+        <div class="countdown-container">
+            <p class="countdown-text">Promo berakhir dalam:</p>
+            <div class="countdown" id="countdown">
+                <div class="countdown-item">
+                    <span id="hours">24</span>
+                    <span class="countdown-label">Jam</span>
+                </div>
+                <div class="countdown-item">
+                    <span id="minutes">00</span>
+                    <span class="countdown-label">Menit</span>
+                </div>
+                <div class="countdown-item">
+                    <span id="seconds">00</span>
+                    <span class="countdown-label">Detik</span>
+                </div>
+            </div>
+        </div>
+        <a href="#games" class="hero-button" id="heroButton">DAPATKAN BONUS SPESIAL!</a>
+    </div>
+</div>
+
+<script>
+    // Create sparkle animation for hero button
+    document.addEventListener('DOMContentLoaded', function() {
+        const heroButton = document.getElementById('heroButton');
+        
+        // Create sparkles
+        for (let i = 0; i < 5; i++) {
+            const sparkle = document.createElement('div');
+            sparkle.classList.add('sparkle');
+            sparkle.style.width = Math.random() * 6 + 2 + 'px';
+            sparkle.style.height = sparkle.style.width;
+            
+            // Position sparkles randomly around the button
+            sparkle.style.top = Math.random() * 100 + '%';
+            sparkle.style.left = Math.random() * 100 + '%';
+            
+            // Different animation delay for each sparkle
+            sparkle.style.animationDelay = Math.random() * 2 + 's';
+            
+            heroButton.appendChild(sparkle);
+        }
+        
+        // Add hover animation
+        heroButton.addEventListener('mouseover', function() {
+            this.style.transform = 'translateY(-5px) scale(1.05)';
+            this.style.boxShadow = '0 10px 25px rgba(59, 130, 246, 0.8)';
+        });
+        
+        heroButton.addEventListener('mouseout', function() {
+            this.style.transform = '';
+            this.style.boxShadow = '';
+        });
+        
+        // Countdown timer functionality
+        function initCountdown() {
+            const hoursElement = document.getElementById('hours');
+            const minutesElement = document.getElementById('minutes');
+            const secondsElement = document.getElementById('seconds');
+            
+            // Check if we have a stored end time
+            let endTime = localStorage.getItem('promoEndTime');
+            
+            // If no end time is stored or it's in the past, set a new one 24 hours from now
+            if (!endTime || new Date(parseInt(endTime)) <= new Date()) {
+                endTime = new Date().getTime() + (24 * 60 * 60 * 1000); // 24 hours from now
+                localStorage.setItem('promoEndTime', endTime);
+            }
+            
+            function updateCountdown() {
+                // Get current time
+                const currentTime = new Date().getTime();
+                
+                // Calculate remaining time
+                let remainingTime = parseInt(endTime) - currentTime;
+                
+                if (remainingTime <= 0) {
+                    // Reset to 24 hours when countdown reaches zero
+                    endTime = new Date().getTime() + (24 * 60 * 60 * 1000);
+                    localStorage.setItem('promoEndTime', endTime);
+                    remainingTime = parseInt(endTime) - currentTime;
+                }
+                
+                // Calculate hours, minutes, seconds
+                const hours = Math.floor(remainingTime / (1000 * 60 * 60));
+                remainingTime -= hours * (1000 * 60 * 60);
+                
+                const minutes = Math.floor(remainingTime / (1000 * 60));
+                remainingTime -= minutes * (1000 * 60);
+                
+                const seconds = Math.floor(remainingTime / 1000);
+                
+                // Update display with leading zeros
+                hoursElement.textContent = hours < 10 ? '0' + hours : hours;
+                minutesElement.textContent = minutes < 10 ? '0' + minutes : minutes;
+                secondsElement.textContent = seconds < 10 ? '0' + seconds : seconds;
+            }
+            
+            // Update immediately and then every second
+            updateCountdown();
+            setInterval(updateCountdown, 1000);
+        }
+        
+        // Initialize countdown
+        initCountdown();
+    });
+</script>
+
+<!-- Category Tabs -->
+<div class="category-tabs">
+    <button class="category-tab active" data-translate="gamePopuler" title="Tampilkan Game Populer">Game Populer</button>
+    <button class="category-tab" data-translate="battleRoyale" title="Tampilkan Game Battle Royale">Battle Royale</button>
+    <button class="category-tab" data-translate="moba" title="Tampilkan Game MOBA">MOBA</button>
+    <button class="category-tab" data-translate="rpg" title="Tampilkan Game RPG">RPG</button>
+    <button class="category-tab" data-translate="arcade" title="Tampilkan Game Arcade">Arcade</button>
+</div>
+
+<!-- Product Grid -->
+<div class="product-grid">
+    <!-- Mobile Legends -->
+    <div class="product-card">
+        <div class="product-badge">PROMO 50%</div>
+        <div class="product-image">
+            <img src="mobilelegends-1696089976653.jpg" alt="Mobile Legends">
+        </div>
+        <div class="product-content">
+            <h3 class="product-title">Mobile Legends</h3>
+            <p class="product-description">Diamonds, Starlight, <span data-translate="paketMingguan">Paket Mingguan</span></p>
+        </div>
+        <a href="mlbb.html" class="game-card-button"><i class="fas fa-gem"></i> Beli Diamonds Sekarang!</a>
+    </div>
+    
+    <!-- Free Fire -->
+    <div class="product-card">
+        <div class="product-badge">BONUS 100 DM</div>
+        <div class="product-image">
+            <img src="unnamed.png" alt="Free Fire">
+        </div>
+        <div class="product-content">
+            <h3 class="product-title">Free Fire</h3>
+            <p class="product-description">Diamonds, <span data-translate="keanggotaan">Keanggotaan</span>, <span data-translate="paketMingguan">Paket Mingguan</span></p>
+        </div>
+        <a href="freefire.html" class="game-card-button"><i class="fas fa-fire"></i> Dapatkan Diamonds FF!</a>
+    </div>
+    
+    <!-- PUBG Mobile -->
+    <div class="product-card">
+        <div class="product-badge">DISKON 30%</div>
+        <div class="product-image">
+            <img src="pubg.avif" alt="PUBG Mobile">
+        </div>
+        <div class="product-content">
+            <h3 class="product-title">PUBG Mobile</h3>
+            <p class="product-description">UC, <span data-translate="royalPass">Royal Pass</span>, <span data-translate="paketPremium">Paket Premium</span></p>
+        </div>
+        <a href="pubg.html" class="game-card-button"><i class="fas fa-crown"></i> Beli UC & Royal Pass!</a>
+    </div>
+    
+    <!-- Grow A Garden -->
+    <div class="product-card">
+        <div class="product-badge">GRATIS!</div>
+        <div class="product-image">
+            <img src="noFilter.webp" alt="Grow A Garden">
+        </div>
+        <div class="product-content">
+            <h3 class="product-title">Grow A Garden</h3>
+            <p class="product-description"><span data-translate="gameGratis">Game Gratis</span></p>
+        </div>
+        <a href="garden.html" class="game-card-button"><i class="fas fa-seedling"></i> Mainkan Gratis Sekarang!</a>
+    </div>
+    
+    <!-- Roblox -->
+    <div class="product-card">
+        <div class="product-badge">BEST SELLER</div>
+        <div class="product-image">
+            <img src="roblox.jpg" alt="Roblox">
+        </div>
+        <div class="product-content">
+            <h3 class="product-title">Roblox</h3>
+            <p class="product-description">Robux, <span data-translate="keanggotaan">Keanggotaan</span>, <span data-translate="paketPremium">Paket Premium</span></p>
+        </div>
+        <a href="roblox.html" class="game-card-button"><i class="fas fa-cube"></i> Beli Robux Murah!</a>
+    </div>
+</div>
+
+<!-- Footer -->
+<div class="footer">
+    <h2 class="footer-title">Verda4<span>Store</span></h2>
+    <p class="footer-description">Platform top up game terpercaya dengan proses cepat dan harga terbaik. Kami menyediakan berbagai layanan top up untuk game populer.</p>
+    
+    <div class="footer-sections">
+        <div class="footer-section">
+            <h3 class="footer-section-title" data-translate="layanan">LAYANAN</h3>
+            <ul class="footer-links">
+                <li><a href="mlbb.html">Mobile Legends</a></li>
+                <li><a href="freefire.html">Free Fire</a></li>
+                <li><a href="pubg.html">PUBG Mobile</a></li>
+                <li><a href="garden.html">Grow A Garden</a></li>
+                <li><a href="roblox.html">Roblox</a></li>
+            </ul>
+        </div>
+        
+        <div class="footer-section">
+            <h3 class="footer-section-title" data-translate="informasi">INFORMASI</h3>
+            <ul class="footer-links">
+                <li><a href="cek-transaksi.html">Cek Transaksi</a></li>
+                <li><a href="contact.html">Hubungi Kami</a></li>
+                <li><a href="syarat-ketentuan.html">Syarat & Ketentuan</a></li>
+                <li><a href="kebijakan-privasi.html">Kebijakan Privasi</a></li>
+            </ul>
+        </div>
+        
+        <div class="footer-section">
+            <h3 class="footer-section-title" data-translate="sosialMedia">SOSIAL MEDIA</h3>
+            <div class="social-links">
+                <a href="https://instagram.com/verda4store" class="social-link" target="_blank" rel="noopener noreferrer" onclick="window.open('https://instagram.com/verda4store', '_blank'); return false;" title="Instagram Verda4Store"><i class="fab fa-instagram" aria-hidden="true"></i><span class="sr-only">Instagram</span></a>
+                <a href="https://tiktok.com/@fahril29124" class="social-link" target="_blank" rel="noopener noreferrer" onclick="window.open('https://tiktok.com/@fahril29124', '_blank'); return false;" title="TikTok fahril29124"><i class="fab fa-tiktok" aria-hidden="true"></i><span class="sr-only">TikTok</span></a>
+                <a href="hubungi-kami.html" class="social-link" title="Hubungi Kami"><i class="fas fa-envelope" aria-hidden="true"></i><span class="sr-only">Hubungi Kami</span></a>
+            </div>
+        </div>
+    </div>
+    
+    <div class="copyright">
+        &copy; 2025 Verda4Store. <span data-translate="hakCipta">Hak Cipta Dilindungi</span>.
+    </div>
+</div>
+
+<script>
+    // Language translations
+    const translations = {
+        id: {
+            gamePopuler: "Game Populer",
+            battleRoyale: "Battle Royale",
+            moba: "MOBA",
+            rpg: "RPG",
+            arcade: "Arcade",
+            diamonds: "Diamonds",
+            starlight: "Starlight",
+            paketMingguan: "Paket Mingguan",
+            keanggotaan: "Keanggotaan",
+            uc: "UC",
+            royalPass: "Royal Pass",
+            paketPremium: "Paket Premium",
+            gameGratis: "Game Gratis",
+            isiUlang: "<i class='fas fa-gem'></i> Beli Diamonds Sekarang!",
+            mainkan: "<i class='fas fa-seedling'></i> Mainkan Gratis Sekarang!",
+            layanan: "LAYANAN",
+            informasi: "INFORMASI",
+            sosialMedia: "SOSIAL MEDIA",
+            hakCipta: "Hak Cipta Dilindungi",
+            memuat: "Memuat..."
+        },
+        en: {
+            gamePopuler: "Popular Games",
+            battleRoyale: "Battle Royale",
+            moba: "MOBA",
+            rpg: "RPG",
+            arcade: "Arcade",
+            diamonds: "Diamonds",
+            starlight: "Starlight",
+            paketMingguan: "Weekly Pass",
+            keanggotaan: "Membership",
+            uc: "UC",
+            royalPass: "Royal Pass",
+            paketPremium: "Prime Plus",
+            gameGratis: "Free Game",
+            isiUlang: "<i class='fas fa-gem'></i> Buy Diamonds Now!",
+            mainkan: "<i class='fas fa-seedling'></i> Play Free Now!",
+            layanan: "SERVICES",
+            informasi: "INFORMATION",
+            sosialMedia: "SOCIAL MEDIA",
+            hakCipta: "All Rights Reserved",
+            memuat: "Loading..."
+        }
+    };
+    
+    let currentLang = 'id';
+    
+    function changeLang(lang) {
+        currentLang = lang;
+        document.querySelectorAll('[data-translate]').forEach(element => {
+            const key = element.getAttribute('data-translate');
+            if (translations[lang][key]) {
+                element.innerHTML = translations[lang][key];
+            }
+        });
+        
+        // Update flag in language button
+        const flagSpan = document.querySelector('.lang-button .flag');
+        flagSpan.textContent = lang === 'id' ? '🇮🇩' : '🇬🇧';
+        
+        // Close dropdown
+        document.getElementById("langDropdown").classList.remove("show");
+    }
+    
+    function openNav() {
+        document.getElementById("mySidenav").style.width = "250px";
+    }
+    
+    function closeNav() {
+        document.getElementById("mySidenav").style.width = "0";
+    }
+    
+    function toggleLang() {
+        document.getElementById("langDropdown").classList.toggle("show");
+    }
+    
+    // Close the dropdown if the user clicks outside of it
+    window.onclick = function(event) {
+        if (!event.target.matches('.lang-button') && !event.target.matches('.lang-button *')) {
+            var dropdowns = document.getElementsByClassName("lang-content");
+            for (var i = 0; i < dropdowns.length; i++) {
+                var openDropdown = dropdowns[i];
+                if (openDropdown.classList.contains('show')) {
+                    openDropdown.classList.remove('show');
+                }
+            }
+        }
+    }
+    
+    // Loading animation
+    window.addEventListener('load', function() {
+        setTimeout(function() {
+            const loadingOverlay = document.getElementById('loadingOverlay');
+            loadingOverlay.style.opacity = '0';
+            setTimeout(function() {
+                loadingOverlay.style.display = 'none';
+            }, 500);
+        }, 2000); // Show loading for at least 2 seconds for effect
+    });
+    
+    // Category tabs functionality
+    document.addEventListener('DOMContentLoaded', function() {
+        const categoryTabs = document.querySelectorAll('.category-tab');
+        const productCards = document.querySelectorAll('.product-card');
+        
+        // Define which games belong to which categories
+        const categories = {
+            'gamePopuler': ['Mobile Legends', 'Free Fire', 'PUBG Mobile', 'Grow A Garden', 'Roblox'],
+            'battleRoyale': ['Free Fire', 'PUBG Mobile'],
+            'moba': ['Mobile Legends'],
+            'rpg': ['Grow A Garden', 'Roblox'],
+            'arcade': ['Grow A Garden', 'Roblox']
+        };
+        
+        categoryTabs.forEach(tab => {
+            tab.addEventListener('click', function() {
+                // Remove active class from all tabs
+                categoryTabs.forEach(t => t.classList.remove('active'));
+                
+                // Add active class to clicked tab
+                this.classList.add('active');
+                
+                // Get the category from the data-translate attribute
+                const category = this.getAttribute('data-translate');
+                
+                // Show/hide products based on category
+                productCards.forEach(card => {
+                    const title = card.querySelector('.product-title').textContent;
+                    
+                    if (category === 'gamePopuler' || categories[category].includes(title)) {
+                        card.style.display = 'block';
+                    } else {
+                        card.style.display = 'none';
+                    }
+                });
+            });
+        });
+        
+        // Make sure social media links are working
+        document.querySelectorAll('.social-link').forEach(link => {
+            const href = link.getAttribute('href');
+            
+            if (!href.startsWith('mailto:')) {
+                link.addEventListener('click', function(e) {
+                    e.preventDefault();
+                    window.open(href, '_blank');
+                });
+            }
+        });
+    });
+    
+    // Toast notification functionality
+    function closeToast() {
+        const toast = document.getElementById('toastNotification');
+        toast.classList.remove('show');
+    }
+    
+    // Show toast notification after page load
+    // Using window.onload instead of DOMContentLoaded to ensure everything is loaded
+    window.addEventListener('load', function() {
+        // Wait for loading animation to complete (2s) plus a bit more time
+        setTimeout(function() {
+            const toast = document.getElementById('toastNotification');
+            // Make sure the toast is visible and properly positioned
+            toast.style.display = 'flex';
+            toast.classList.add('show');
+            
+            // Auto close after 8 seconds
+            setTimeout(function() {
+                closeToast();
+            }, 8000);
+        }, 3500); // Show toast 3.5 seconds after complete page load
+    });
+</script>
+</body>
+</html>

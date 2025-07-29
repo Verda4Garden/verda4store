@@ -1,0 +1,18 @@
+{
+  "Version": 3,
+  "Groups": [
+    {
+      "Id": "Face",
+      "Ids": [
+        "ParamEyeLOpen",
+        "ParamEyeROpen",
+        "ParamBrowLY",
+        "ParamBrowRY",
+        "ParamBrowLAngle",
+        "ParamBrowRAngle",
+        "ParamMouthForm",
+        "ParamMouthOpenY"
+      ]
+    }
+  ]
+}

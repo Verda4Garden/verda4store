@@ -1,0 +1,295 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Roblox API Test</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        .container {
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+        }
+        .input-group {
+            display: flex;
+            gap: 10px;
+        }
+        input {
+            padding: 8px;
+            flex: 1;
+        }
+        button {
+            padding: 8px 16px;
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+        .result {
+            margin-top: 20px;
+            padding: 15px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            background-color: #f9f9f9;
+        }
+        .avatar-container {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            margin-top: 20px;
+        }
+        .avatar-image {
+            width: 200px;
+            height: 200px;
+            border-radius: 10px;
+            object-fit: cover;
+            border: 3px solid #4CAF50;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+        }
+        .username {
+            margin-top: 10px;
+            font-weight: bold;
+        }
+        .user-id {
+            color: #666;
+        }
+        pre {
+            background-color: #f1f1f1;
+            padding: 10px;
+            border-radius: 4px;
+            overflow-x: auto;
+        }
+    </style>
+</head>
+<body>
+    <h1>Roblox API Test</h1>
+    
+    <div class="container">
+        <div>
+            <h2>Step 1: Get User ID from Username</h2>
+            <div class="input-group">
+                <input type="text" id="username" placeholder="Enter Roblox username">
+                <button id="getUserId">Get User ID</button>
+            </div>
+            <div id="userIdResult" class="result">
+                <p>Results will appear here...</p>
+            </div>
+        </div>
+        
+        <div>
+            <h2>Step 2: Get Avatar from User ID</h2>
+            <div class="input-group">
+                <input type="text" id="userId" placeholder="Enter Roblox User ID">
+                <button id="getAvatar">Get Avatar</button>
+            </div>
+            <div id="avatarResult" class="result">
+                <p>Results will appear here...</p>
+            </div>
+        </div>
+        
+        <div>
+            <h2>Step 3: One-Click Test</h2>
+            <div class="input-group">
+                <input type="text" id="testUsername" placeholder="Enter Roblox username">
+                <button id="testAll">Test All Steps</button>
+            </div>
+            <div id="testResult" class="result">
+                <p>Results will appear here...</p>
+            </div>
+        </div>
+    </div>
+    
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // Get User ID from Username
+            document.getElementById('getUserId').addEventListener('click', async function() {
+                const username = document.getElementById('username').value.trim();
+                if (!username) {
+                    alert('Please enter a username');
+                    return;
+                }
+                
+                const resultDiv = document.getElementById('userIdResult');
+                resultDiv.innerHTML = '<p>Loading...</p>';
+                
+                try {
+                    const userId = await fetchRobloxUserId(username);
+                    if (userId) {
+                        resultDiv.innerHTML = `
+                            <p>✅ Success! User ID found:</p>
+                            <pre>${userId}</pre>
+                            <p>Copy this ID to Step 2 to get the avatar.</p>
+                        `;
+                        // Auto-fill the user ID input
+                        document.getElementById('userId').value = userId;
+                    } else {
+                        resultDiv.innerHTML = `
+                            <p>❌ Error: Username not found</p>
+                        `;
+                    }
+                } catch (error) {
+                    resultDiv.innerHTML = `
+                        <p>❌ Error: ${error.message}</p>
+                        <pre>${error.stack}</pre>
+                    `;
+                }
+            });
+            
+            // Get Avatar from User ID
+            document.getElementById('getAvatar').addEventListener('click', async function() {
+                const userId = document.getElementById('userId').value.trim();
+                if (!userId) {
+                    alert('Please enter a User ID');
+                    return;
+                }
+                
+                const resultDiv = document.getElementById('avatarResult');
+                resultDiv.innerHTML = '<p>Loading...</p>';
+                
+                try {
+                    const avatarUrl = await fetchRobloxAvatar(userId);
+                    if (avatarUrl) {
+                        resultDiv.innerHTML = `
+                            <p>✅ Success! Avatar URL found:</p>
+                            <pre>${avatarUrl}</pre>
+                            <div class="avatar-container">
+                                <img src="${avatarUrl}" alt="Roblox Avatar" class="avatar-image">
+                                <p class="user-id">User ID: ${userId}</p>
+                            </div>
+                        `;
+                    } else {
+                        resultDiv.innerHTML = `
+                            <p>❌ Error: Avatar not found</p>
+                        `;
+                    }
+                } catch (error) {
+                    resultDiv.innerHTML = `
+                        <p>❌ Error: ${error.message}</p>
+                        <pre>${error.stack}</pre>
+                    `;
+                }
+            });
+            
+            // Test All Steps
+            document.getElementById('testAll').addEventListener('click', async function() {
+                const username = document.getElementById('testUsername').value.trim();
+                if (!username) {
+                    alert('Please enter a username');
+                    return;
+                }
+                
+                const resultDiv = document.getElementById('testResult');
+                resultDiv.innerHTML = '<p>Loading...</p>';
+                
+                try {
+                    // Step 1: Get User ID
+                    resultDiv.innerHTML = '<p>Step 1: Getting User ID...</p>';
+                    const userId = await fetchRobloxUserId(username);
+                    if (!userId) {
+                        resultDiv.innerHTML = `
+                            <p>❌ Error: Username not found</p>
+                        `;
+                        return;
+                    }
+                    
+                    // Step 2: Get Avatar
+                    resultDiv.innerHTML += '<p>Step 2: Getting Avatar...</p>';
+                    const avatarUrl = await fetchRobloxAvatar(userId);
+                    if (!avatarUrl) {
+                        resultDiv.innerHTML += `
+                            <p>❌ Error: Avatar not found</p>
+                        `;
+                        return;
+                    }
+                    
+                    // Success!
+                    resultDiv.innerHTML = `
+                        <p>✅ All steps completed successfully!</p>
+                        <div class="avatar-container">
+                            <img src="${avatarUrl}" alt="${username}'s Avatar" class="avatar-image">
+                            <p class="username">${username}</p>
+                            <p class="user-id">User ID: ${userId}</p>
+                        </div>
+                        <p>User ID: ${userId}</p>
+                        <p>Avatar URL: <a href="${avatarUrl}" target="_blank">${avatarUrl}</a></p>
+                    `;
+                } catch (error) {
+                    resultDiv.innerHTML += `
+                        <p>❌ Error: ${error.message}</p>
+                        <pre>${error.stack}</pre>
+                    `;
+                }
+            });
+            
+            /**
+             * Fetch Roblox user ID from username
+             * @param {string} username - Roblox username
+             * @returns {Promise<number|null>} - User ID or null if not found
+             */
+            async function fetchRobloxUserId(username) {
+                try {
+                    const response = await fetch('https://users.roblox.com/v1/usernames/users', {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json'
+                        },
+                        body: JSON.stringify({
+                            usernames: [username]
+                        })
+                    });
+                    
+                    if (!response.ok) {
+                        throw new Error(`HTTP error! status: ${response.status}`);
+                    }
+                    
+                    const data = await response.json();
+                    console.log('User data:', data);
+                    
+                    if (data.data && data.data.length > 0) {
+                        return data.data[0].id;
+                    }
+                    
+                    return null;
+                } catch (error) {
+                    console.error('Error fetching Roblox user ID:', error);
+                    throw error;
+                }
+            }
+            
+            /**
+             * Fetch Roblox avatar URL using user ID
+             * @param {number} userId - Roblox user ID
+             * @returns {Promise<string|null>} - Avatar URL or null if not found
+             */
+            async function fetchRobloxAvatar(userId) {
+                try {
+                    const response = await fetch(`https://thumbnails.roblox.com/v1/users/avatar?userIds=${userId}&size=420x420&format=Png&isCircular=false`);
+                    
+                    if (!response.ok) {
+                        throw new Error(`HTTP error! status: ${response.status}`);
+                    }
+                    
+                    const data = await response.json();
+                    console.log('Avatar data:', data);
+                    
+                    if (data.data && data.data.length > 0) {
+                        return data.data[0].imageUrl;
+                    }
+                    
+                    return null;
+                } catch (error) {
+                    console.error('Error fetching Roblox avatar:', error);
+                    throw error;
+                }
+            }
+        });
+    </script>
+</body>
+</html>
