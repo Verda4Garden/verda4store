@@ -64,19 +64,50 @@ async function sendOrderToTelegram(orderData) {
                 error: data.ok ? null : data.description
             };
         } else {
-            // If deployed, use the serverless function
-            console.log('Running in deployed environment, using serverless function');
-            response = await fetch('/api/telegram', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                },
-                body: JSON.stringify({
-                    message: message,
-                    chatId: TELEGRAM_CONFIG.chatId,
-                    botToken: TELEGRAM_CONFIG.botToken // Pass the bot token to the serverless function
-                })
-            });
+            // If deployed, try to use the serverless function first
+            console.log('Running in deployed environment, trying serverless function');
+            try {
+                response = await fetch('/api/telegram', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({
+                        message: message,
+                        chatId: TELEGRAM_CONFIG.chatId,
+                        botToken: TELEGRAM_CONFIG.botToken // Pass the bot token to the serverless function
+                    })
+                });
+                
+                // If the response is not OK (e.g., 404), throw an error to trigger the fallback
+                if (!response.ok) {
+                    throw new Error(`Serverless function returned ${response.status}: ${response.statusText}`);
+                }
+            } catch (serverlessError) {
+                // If the serverless function fails, fall back to direct API call
+                console.warn('Serverless function failed, falling back to direct API call:', serverlessError.message);
+                console.log('Calling Telegram API directly as fallback...');
+                
+                response = await fetch(`https://api.telegram.org/bot${TELEGRAM_CONFIG.botToken}/sendMessage`, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({
+                        chat_id: TELEGRAM_CONFIG.chatId,
+                        text: message,
+                        parse_mode: 'HTML'
+                    })
+                });
+                
+                // Process the response from direct API call
+                const data = await response.json();
+                return {
+                    success: data.ok,
+                    data: data,
+                    error: data.ok ? null : data.description
+                };
+            }
         }
         
         let result;
@@ -212,19 +243,50 @@ async function sendPaymentConfirmationToTelegram(paymentData) {
                 error: data.ok ? null : data.description
             };
         } else {
-            // If deployed, use the serverless function
-            console.log('Running in deployed environment, using serverless function');
-            response = await fetch('/api/telegram', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                },
-                body: JSON.stringify({
-                    message: message,
-                    chatId: TELEGRAM_CONFIG.chatId,
-                    botToken: TELEGRAM_CONFIG.botToken // Pass the bot token to the serverless function
-                })
-            });
+            // If deployed, try to use the serverless function first
+            console.log('Running in deployed environment, trying serverless function');
+            try {
+                response = await fetch('/api/telegram', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({
+                        message: message,
+                        chatId: TELEGRAM_CONFIG.chatId,
+                        botToken: TELEGRAM_CONFIG.botToken // Pass the bot token to the serverless function
+                    })
+                });
+                
+                // If the response is not OK (e.g., 404), throw an error to trigger the fallback
+                if (!response.ok) {
+                    throw new Error(`Serverless function returned ${response.status}: ${response.statusText}`);
+                }
+            } catch (serverlessError) {
+                // If the serverless function fails, fall back to direct API call
+                console.warn('Serverless function failed, falling back to direct API call:', serverlessError.message);
+                console.log('Calling Telegram API directly as fallback...');
+                
+                response = await fetch(`https://api.telegram.org/bot${TELEGRAM_CONFIG.botToken}/sendMessage`, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({
+                        chat_id: TELEGRAM_CONFIG.chatId,
+                        text: message,
+                        parse_mode: 'HTML'
+                    })
+                });
+                
+                // Process the response from direct API call
+                const data = await response.json();
+                return {
+                    success: data.ok,
+                    data: data,
+                    error: data.ok ? null : data.description
+                };
+            }
         }
         
         let result;
@@ -347,19 +409,50 @@ async function sendFulfillmentToTelegram(fulfillmentData) {
                 error: data.ok ? null : data.description
             };
         } else {
-            // If deployed, use the serverless function
-            console.log('Running in deployed environment, using serverless function');
-            response = await fetch('/api/telegram', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                },
-                body: JSON.stringify({
-                    message: message,
-                    chatId: TELEGRAM_CONFIG.chatId,
-                    botToken: TELEGRAM_CONFIG.botToken // Pass the bot token to the serverless function
-                })
-            });
+            // If deployed, try to use the serverless function first
+            console.log('Running in deployed environment, trying serverless function');
+            try {
+                response = await fetch('/api/telegram', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({
+                        message: message,
+                        chatId: TELEGRAM_CONFIG.chatId,
+                        botToken: TELEGRAM_CONFIG.botToken // Pass the bot token to the serverless function
+                    })
+                });
+                
+                // If the response is not OK (e.g., 404), throw an error to trigger the fallback
+                if (!response.ok) {
+                    throw new Error(`Serverless function returned ${response.status}: ${response.statusText}`);
+                }
+            } catch (serverlessError) {
+                // If the serverless function fails, fall back to direct API call
+                console.warn('Serverless function failed, falling back to direct API call:', serverlessError.message);
+                console.log('Calling Telegram API directly as fallback...');
+                
+                response = await fetch(`https://api.telegram.org/bot${TELEGRAM_CONFIG.botToken}/sendMessage`, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({
+                        chat_id: TELEGRAM_CONFIG.chatId,
+                        text: message,
+                        parse_mode: 'HTML'
+                    })
+                });
+                
+                // Process the response from direct API call
+                const data = await response.json();
+                return {
+                    success: data.ok,
+                    data: data,
+                    error: data.ok ? null : data.description
+                };
+            }
         }
         
         let result;
@@ -482,19 +575,50 @@ async function sendDiamondStatusToTelegram(statusData) {
                 error: data.ok ? null : data.description
             };
         } else {
-            // If deployed, use the serverless function
-            console.log('Running in deployed environment, using serverless function');
-            response = await fetch('/api/telegram', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                },
-                body: JSON.stringify({
-                    message: message,
-                    chatId: TELEGRAM_CONFIG.chatId,
-                    botToken: TELEGRAM_CONFIG.botToken // Pass the bot token to the serverless function
-                })
-            });
+            // If deployed, try to use the serverless function first
+            console.log('Running in deployed environment, trying serverless function');
+            try {
+                response = await fetch('/api/telegram', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({
+                        message: message,
+                        chatId: TELEGRAM_CONFIG.chatId,
+                        botToken: TELEGRAM_CONFIG.botToken // Pass the bot token to the serverless function
+                    })
+                });
+                
+                // If the response is not OK (e.g., 404), throw an error to trigger the fallback
+                if (!response.ok) {
+                    throw new Error(`Serverless function returned ${response.status}: ${response.statusText}`);
+                }
+            } catch (serverlessError) {
+                // If the serverless function fails, fall back to direct API call
+                console.warn('Serverless function failed, falling back to direct API call:', serverlessError.message);
+                console.log('Calling Telegram API directly as fallback...');
+                
+                response = await fetch(`https://api.telegram.org/bot${TELEGRAM_CONFIG.botToken}/sendMessage`, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({
+                        chat_id: TELEGRAM_CONFIG.chatId,
+                        text: message,
+                        parse_mode: 'HTML'
+                    })
+                });
+                
+                // Process the response from direct API call
+                const data = await response.json();
+                return {
+                    success: data.ok,
+                    data: data,
+                    error: data.ok ? null : data.description
+                };
+            }
         }
         
         let result;
@@ -639,24 +763,29 @@ async function testTelegramBot() {
             alert('Telegram test message sent successfully!');
             return true;
         } else {
-            // If deployed, use the serverless function
-            console.log('Using serverless function...');
-            response = await fetch('/api/telegram', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                },
-                body: JSON.stringify({
-                    message: testMessage,
-                    chatId: TELEGRAM_CONFIG.chatId,
-                    botToken: TELEGRAM_CONFIG.botToken
-                })
-            });
-            
-            // Log the raw response
-            console.log('Raw response:', response);
-            
+            // If deployed, try to use the serverless function first
+            console.log('Running in deployed environment, trying serverless function...');
             try {
+                response = await fetch('/api/telegram', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({
+                        message: testMessage,
+                        chatId: TELEGRAM_CONFIG.chatId,
+                        botToken: TELEGRAM_CONFIG.botToken
+                    })
+                });
+                
+                // Log the raw response
+                console.log('Raw response:', response);
+                
+                // If the response is not OK (e.g., 404), throw an error to trigger the fallback
+                if (!response.ok) {
+                    throw new Error(`Serverless function returned ${response.status}: ${response.statusText}`);
+                }
+                
                 // Parse the response
                 const result = await response.json();
                 console.log('Response JSON:', result);
@@ -670,13 +799,45 @@ async function testTelegramBot() {
                 console.log('Test successful!', result);
                 alert('Telegram test message sent successfully!');
                 return true;
-            } catch (parseError) {
-                console.error('Error parsing response:', parseError);
-                console.error('Response status:', response.status);
-                const responseText = await response.text();
-                console.error('Response text:', responseText);
-                alert(`Error parsing response: ${parseError.message}\nResponse: ${responseText}`);
-                return false;
+            } catch (serverlessError) {
+                // If the serverless function fails, fall back to direct API call
+                console.warn('Serverless function failed, falling back to direct API call:', serverlessError.message);
+                console.log('Calling Telegram API directly as fallback...');
+                
+                try {
+                    response = await fetch(`https://api.telegram.org/bot${TELEGRAM_CONFIG.botToken}/sendMessage`, {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json',
+                        },
+                        body: JSON.stringify({
+                            chat_id: TELEGRAM_CONFIG.chatId,
+                            text: testMessage,
+                            parse_mode: 'HTML'
+                        })
+                    });
+                    
+                    // Log the raw response
+                    console.log('Raw fallback response:', response);
+                    
+                    // Parse the response
+                    const data = await response.json();
+                    console.log('Fallback response JSON:', data);
+                    
+                    if (!data.ok) {
+                        console.error('Fallback test failed:', data.description);
+                        alert(`Telegram fallback test failed: ${data.description}`);
+                        return false;
+                    }
+                    
+                    console.log('Fallback test successful!', data);
+                    alert('Telegram test message sent successfully via fallback!');
+                    return true;
+                } catch (fallbackError) {
+                    console.error('Error in fallback API call:', fallbackError);
+                    alert(`Error in fallback API call: ${fallbackError.message}`);
+                    return false;
+                }
             }
         }
     } catch (error) {
