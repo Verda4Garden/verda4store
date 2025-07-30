@@ -2610,19 +2610,9 @@ document.addEventListener('DOMContentLoaded', function() {
         });
     }
     
-    // Helper function to get user ID from username
+    // Helper function to get user ID from username - simplified version
     async function getUserIdFromUsername(username) {
-        try {
-            // Try using our API helper
-            const userId = await window.RobloxAPI.fetchUserId(username);
-            if (userId) return userId;
-            
-            // Fallback to the original method
-            return await fetchRobloxUserIdWithJSONP(username);
-        } catch (error) {
-            console.error('Error getting user ID:', error);
-            return null;
-        }
+        return await window.RobloxAPI.fetchUserId(username);
     }
     
     /**
@@ -2636,52 +2626,18 @@ document.addEventListener('DOMContentLoaded', function() {
             // Show loading message
             showAvatarMessage('loading', 'Mencari pengguna Roblox...');
             
-            // Step 1: Get userId from username using our API helper
+            // Step 1: Get userId from username using our updated API helper
+            // This will always return a userId (either real or simulated)
             const userId = await window.RobloxAPI.fetchUserId(username);
-            if (!userId) {
-                // Try fallback methods if our API fails
-                const fallbackId = await fetchRobloxUserIdWithJSONP(username);
-                if (!fallbackId) {
-                    showAvatarMessage('error', 'Username tidak ditemukan.');
-                    return;
-                }
-                console.log('Roblox Avatar Viewer: User ID found (fallback):', fallbackId);
-                
-                // Step 2: Get avatar URL using userId with fallback method
-                const avatarUrl = await fetchRobloxAvatarWithJSONP(fallbackId);
-                if (!avatarUrl) {
-                    showAvatarMessage('error', 'Tidak dapat mengambil avatar.');
-                    return;
-                }
-                
-                console.log('Roblox Avatar Viewer: Avatar URL found (fallback):', avatarUrl);
-                
-                // Step 3: Display the avatar
-                displayAvatar(username, fallbackId, avatarUrl);
-            } else {
-                console.log('Roblox Avatar Viewer: User ID found:', userId);
-                
-                // Step 2: Get avatar URL using userId with our API helper
-                const avatarUrl = await window.RobloxAPI.fetchAvatar(userId);
-                if (!avatarUrl) {
-                    // Try fallback method if our API fails
-                    const fallbackUrl = await fetchRobloxAvatarWithJSONP(userId);
-                    if (!fallbackUrl) {
-                        showAvatarMessage('error', 'Tidak dapat mengambil avatar.');
-                        return;
-                    }
-                    
-                    console.log('Roblox Avatar Viewer: Avatar URL found (fallback):', fallbackUrl);
-                    
-                    // Step 3: Display the avatar
-                    displayAvatar(username, userId, fallbackUrl);
-                } else {
-                    console.log('Roblox Avatar Viewer: Avatar URL found:', avatarUrl);
-                    
-                    // Step 3: Display the avatar
-                    displayAvatar(username, userId, avatarUrl);
-                }
-            }
+            console.log('Roblox Avatar Viewer: User ID found:', userId);
+            
+            // Step 2: Get avatar URL using userId with our updated API helper
+            // This will always return an avatar URL (either real or fallback)
+            const avatarUrl = await window.RobloxAPI.fetchAvatar(userId);
+            console.log('Roblox Avatar Viewer: Avatar URL found:', avatarUrl);
+            
+            // Step 3: Display the avatar
+            displayAvatar(username, userId, avatarUrl);
             
             // Show success message in the error div
             const errorDiv = document.getElementById('buyerNameError');
@@ -2690,154 +2646,28 @@ document.addEventListener('DOMContentLoaded', function() {
                 errorDiv.className = 'success-message';
                 errorDiv.style.display = 'block';
             }
+            
+            return true;
         } catch (error) {
             console.error('Roblox Avatar Viewer: Error fetching avatar:', error);
             showAvatarMessage('error', 'Terjadi kesalahan: ' + error.message);
+            return false;
         }
     }
     
     /**
-     * Fetch Roblox user ID from username using a fallback method
+     * Helper function to get user ID from username
      * @param {string} username - Roblox username
-     * @returns {Promise<number|null>} - User ID or null if not found
+     * @returns {Promise<number>} - User ID (always returns a value)
      */
-    async function fetchRobloxUserIdWithJSONP(username) {
+    async function getUserIdFromUsername(username) {
         try {
-            // Try server-side proxy if available
-            try {
-                const response = await fetch('/api/roblox-user', {
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json'
-                    },
-                    body: JSON.stringify({
-                        username: username
-                    })
-                });
-                
-                if (response.ok) {
-                    const result = await response.json();
-                    if (result.success && result.data) {
-                        return result.data.id;
-                    }
-                }
-            } catch (directApiError) {
-                console.warn('Roblox Avatar Viewer: API proxy call failed, trying fallback', directApiError);
-            }
-            
-            // Try profile proxy if available
-            try {
-                const searchResponse = await fetch(`/api/roblox-profile?username=${encodeURIComponent(username)}`);
-                
-                if (searchResponse.ok) {
-                    const result = await searchResponse.json();
-                    if (result.success && result.data && result.data.id) {
-                        return result.data.id;
-                    }
-                }
-            } catch (profileError) {
-                console.warn('Roblox Avatar Viewer: Profile proxy call failed', profileError);
-            }
-            
-            // Direct API call as fallback (may be blocked by CORS)
-            try {
-                const directResponse = await fetch('https://users.roblox.com/v1/usernames/users', {
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json'
-                    },
-                    body: JSON.stringify({
-                        usernames: [username]
-                    })
-                });
-                
-                if (directResponse.ok) {
-                    const data = await directResponse.json();
-                    if (data.data && data.data.length > 0) {
-                        return data.data[0].id;
-                    }
-                }
-            } catch (directApiError) {
-                console.warn('Roblox Avatar Viewer: Direct API call failed', directApiError);
-            }
-            
-            // If all methods fail, use a simulated ID based on the username
-            // This is just for demonstration purposes
-            console.warn('Roblox Avatar Viewer: All API methods failed, using simulated ID');
-            return generateSimulatedId(username);
+            // Use our updated API helper which always returns a valid ID
+            return await window.RobloxAPI.fetchUserId(username);
         } catch (error) {
-            console.error('Roblox Avatar Viewer: Error fetching user ID:', error);
-            // Last resort fallback
-            return generateSimulatedId(username);
-        }
-    }
-    
-    /**
-     * Generate a simulated user ID from username
-     * @param {string} username - Roblox username
-     * @returns {number} - Simulated user ID
-     */
-    function generateSimulatedId(username) {
-        let hash = 0;
-        for (let i = 0; i < username.length; i++) {
-            const char = username.charCodeAt(i);
-            hash = ((hash << 5) - hash) + char;
-            hash = hash & hash; // Convert to 32bit integer
-        }
-        // Ensure ID is positive and in a reasonable range for Roblox IDs
-        return Math.abs(hash % 900000000) + 100000000;
-    }
-    
-    /**
-     * Fetch Roblox avatar URL using user ID with fallback methods
-     * @param {number} userId - Roblox user ID
-     * @returns {Promise<string|null>} - Avatar URL or null if not found
-     */
-    async function fetchRobloxAvatarWithJSONP(userId) {
-        try {
-            // Try server-side proxy if available
-            try {
-                const response = await fetch(`/api/roblox-avatar?userId=${userId}`);
-                
-                if (response.ok) {
-                    const result = await response.json();
-                    if (result.success && result.data) {
-                        return result.data.imageUrl;
-                    }
-                }
-            } catch (directApiError) {
-                console.warn('Roblox Avatar Viewer: Avatar proxy API call failed, trying fallback', directApiError);
-            }
-            
-            // Direct API call as fallback (may be blocked by CORS)
-            try {
-                const directResponse = await fetch(`https://thumbnails.roblox.com/v1/users/avatar?userIds=${userId}&size=420x420&format=Png&isCircular=false`);
-                
-                if (directResponse.ok) {
-                    const data = await directResponse.json();
-                    if (data.data && data.data.length > 0) {
-                        return data.data[0].imageUrl;
-                    }
-                }
-            } catch (avatarApiError) {
-                console.warn('Roblox Avatar Viewer: Direct avatar API call failed', avatarApiError);
-            }
-            
-            // Fallback to using the avatar thumbnail endpoint
-            try {
-                const fallbackUrl = `https://www.roblox.com/avatar-thumbnail/image?userId=${userId}&width=420&height=420&format=png`;
-                // Just return the URL, we'll check if it loads in the UI
-                return fallbackUrl;
-            } catch (fallbackError) {
-                console.error('Roblox Avatar Viewer: Fallback avatar method failed:', fallbackError);
-            }
-            
-            // If all else fails, use a default avatar URL
-            return `https://tr.rbxcdn.com/avatar/image?userId=${userId}&width=420&height=420&format=png`;
-        } catch (error) {
-            console.error('Roblox Avatar Viewer: Error fetching avatar:', error);
-            // Return a default avatar as last resort
-            return 'https://tr.rbxcdn.com/53eb9b17fe1432a809c73a13889b5006/420/420/Image/Png';
+            console.error('Error getting user ID:', error);
+            // Use the generateConsistentId function from our updated API helper
+            return window.RobloxAPI.generateConsistentId(username);
         }
     }
     
